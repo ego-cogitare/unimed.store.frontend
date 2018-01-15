@@ -1,6 +1,5 @@
 module.exports = {
-  backUrl: 'http://api.e-commerce.loc',
-  frontUrl: 'http://admin.e-commerce.loc',
-  staticFiles: '/',
-  trumbowyg: require('./trumbowyg')
+  backUrl: 'http://api.unimed.com',
+  frontUrl: 'http://unimed.com',
+  staticFiles: '/uploads'
 };
