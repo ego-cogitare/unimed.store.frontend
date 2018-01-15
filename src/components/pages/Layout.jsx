@@ -1,18 +1,18 @@
 import React from 'react';
-// import Partials from './partials';
-// import UI from '../../core/ui';
 import Settings from '../../core/helpers/Settings';
+import Partials from './partials';
 import { subscribe, dispatch } from '../../core/helpers/EventEmitter';
-import { get } from '../../actions/Settings';
+import { bootstrap } from '../../actions/bootstrap';
 import '../../staticFiles/js/app';
+import '../../staticFiles/css/main.css';
 
 export default class Layout extends React.Component {
 
   // Get bootstrap settings
   componentDidMount() {
-    subscribe('settings:sync', () => {
-      get(
-        (config) => Settings.apply(config),
+    subscribe('bootstrap', () => {
+      bootstrap(
+        (data) => Settings.apply(data),
         (e) => {
           dispatch('notification:throw', {
             type: 'danger',
@@ -23,24 +23,16 @@ export default class Layout extends React.Component {
       );
     });
 
-    dispatch('settings:sync');
+    dispatch('bootstrap');
   }
 
   render() {
     return (
-       <div className="hold-transition skin-blue sidebar-mini layout-boxed">
-
-         a
-         {/*
-         <UI.Notifications limit="3" />
-         <UI.Popup />
-         <div className="wrapper">
-          <Partials.Header />
-          <Partials.LeftMenu />
-          <Partials.Content children={this.props.children} />
-          <Partials.Footer />
-        </div>
-        */}
+       <div>
+         <Partials.HeaderMenu />
+         <Partials.Header />
+         <Partials.AdvertisingServices />
+         <Partials.Footer />
       </div>
     );
   }
