@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 export default class LeftMenu extends React.Component {
   render() {
@@ -19,18 +20,13 @@ export default class LeftMenu extends React.Component {
           </div>
           <div class="links left">
             <ul class="columns fw-500 heading-3">
-              <li>
-                <a href="#">главная /</a>
-              </li>
-              <li>
-                <a href="#">о нас /</a>
-              </li>
-              <li>
-                <a href="#">сообщество /</a>
-              </li>
-              <li>
-                <a href="#">журнал органической продукции /</a>
-              </li>
+              {
+                ((this.props.data.menu || []).children || []).map(({ id, link, title })=>(
+                  <li key={id}>
+                    <Link to={link} activeClassName="active">/{title}</Link>
+                  </li>
+                ))
+              }
             </ul>
           </div>
           <div class="pay-cards left">

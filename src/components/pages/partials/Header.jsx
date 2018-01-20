@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 export default class Header extends React.Component {
 
@@ -28,21 +29,13 @@ export default class Header extends React.Component {
             </li>
           </ul>
           <ul class="menu right">
-            <li class="item">
-              <a href="#">для красоты</a>
-            </li>
-            <li class="item">
-              <a href="#">для дома</a>
-            </li>
-            <li class="item">
-              <a href="#">для детей</a>
-            </li>
-            <li class="item">
-              <a href="#">для мужчин</a>
-            </li>
-            <li class="item">
-              <a href="#">акции</a>
-            </li>
+            {
+              ((this.props.data.menu || []).children || []).map(({ id, link, title })=>(
+                <li key={id} class="item">
+                  <Link to={link} activeClassName="active">{title}</Link>
+                </li>
+              ))
+            }
           </ul>
         </div>
       </header>
