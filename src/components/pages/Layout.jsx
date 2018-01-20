@@ -39,7 +39,7 @@ export default class Layout extends React.Component {
        <div>
          <Partials.HeaderMenu data={{ menu: this.state.menus['5a55ff531d41c878ac6206a2'] }} />
          <Partials.Header data={{ menu: this.state.menus['5a5600631d41c878aa666c63'] }} />
-         <Partials.AdvertisingServices />
+         <Partials.Content children={this.props.children} />
          <Partials.Footer data={{ menu: this.state.menus['5a57435b7f36602a06cdb929'] }} />
       </div>
     );

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
   $('.search-cart .fa-search').on('click', function(e) {
     e.preventDefault();
     $(this).parent().toggleClass('expanded');
@@ -40,8 +41,8 @@ $(document).ready(function() {
     var brandSlider = new Swiper('#brands-slider', {
       direction: 'horizontal',
       slidesPerView: 6,
-      nextButton: $(this).find('.btn-next'),
-      prevButton: $(this).find('.btn-prev'),
+      nextButton: $('#brands-slider').find('.btn-next'),
+      prevButton: $('#brands-slider').find('.btn-prev'),
       paginationClickable: true,
       loop: false,
       spaceBetween: 4,
@@ -50,14 +51,14 @@ $(document).ready(function() {
       autoResize: false,
       resizeReInit: true,
       onSlideChangeStart: function(swiper) {
-        $(this).find('.slider-arrow').removeClass('hide');
+        $('#brands-slider').find('.slider-arrow').removeClass('hide');
         if (swiper.isBeginning) {
-          $(this).find('.btn-prev').addClass('hide');
+          $('#brands-slider').find('.btn-prev').addClass('hide');
         }
         if (swiper.isEnd) {
-          $(this).find('.btn-next').addClass('hide');
+          $('#brands-slider').find('.btn-next').addClass('hide');
         }
-      }.bind(this)
+      }
     });
 
     $(window).bind('resize', function() {
@@ -89,10 +90,4 @@ $(document).ready(function() {
       $('#price-range-to').text(values[1]);
     }
   });
-
-  // $(window).bind('scroll', function(e) {
-  //   $(window).scrollTop() > 50
-  //     ? $('body').addClass('small')
-  //     : $('body').removeClass('small');
-  // });
 });

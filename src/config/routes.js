@@ -3,11 +3,14 @@ import React from 'react';
 const routes = {
   // Default routes list
   default: [
-    // Global (Admin) components
-    // {
-    //   path: 'brand(/:id)',
-    //   component: require('../components/pages/brands/Brand.jsx').default
-    // },
+    {
+      path: 'home',
+      component: require('../components/pages/Home.jsx').default
+    },
+    {
+      path: 'contacts',
+      component: require('../components/pages/Contacts.jsx').default
+    },
   ],
   // Custom route component handler depending of the user type
   custom: {
