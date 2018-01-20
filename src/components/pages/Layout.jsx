@@ -21,7 +21,7 @@ export default class Layout extends React.Component {
     bootstrap(
       (data) => {
         dispatch('bootstrap', data);
-        Settings.apply(data);
+        Settings.apply(data.settings);
         this.setState({ menus: data.menus });
       },
       (e) => {

@@ -7,3 +7,7 @@ export function brands(params, success, error) {
 export function products(params, success, error) {
     request(`/store/products`, params, 'get', success, error);
 };
+
+export function blog(params, success, error) {
+    request(`/store/blog`, params, 'get', success, error);
+};
