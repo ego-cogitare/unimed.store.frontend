@@ -24,6 +24,26 @@ export default class Category extends React.Component {
         field: 'dateCreated',
         ascdesc: 1,
       },
+      jRange: [0, 1400]
+    };
+
+    this.filterReset();
+  }
+
+  filterReset() {
+    this.filter = {
+      "$and": [
+        {
+          price: {
+            "$gte": this.state.jRange[0]
+          }
+        },
+        {
+          price: {
+            "$lte": this.state.jRange[1]
+          }
+        }
+      ]
     };
   }
 
@@ -38,6 +58,31 @@ export default class Category extends React.Component {
       (error)  => console.error(error)
     );
     this.resolveState(this.props);
+
+    $(this.refs['price-range']).jRange({
+      from: this.state.jRange[0],
+      to: this.state.jRange[1],
+      step: 1,
+      scale: [],
+      format: '%s',
+      width: 'calc(100% - 25px)',
+      showLabels: false,
+      isRange : true,
+      onstatechange: (value) => {
+        var values = value.split(',');
+        $(this.refs['price-range-from']).text(values[0]);
+        $(this.refs['price-range-to']).text(values[1]);
+      },
+      ondragend: (value) => {
+        // Update filter
+        const [from, to] = value.split(',');
+        this.filter['$and'][0].price['$gte'] = Number(from);
+        this.filter['$and'][1].price['$lte'] = Number(to);
+
+        // Update products list
+        this.fetchProducts(JSON.stringify(this.filter));
+      }
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -45,8 +90,8 @@ export default class Category extends React.Component {
   }
 
   resolveState(props) {
-    const cond = props.params.id ? `{"categoryId":"${props.params.id}"}` : null;
-    let { page: curPage, limit: current, orderBy, ascdesc } = queryString.parse(location.search);
+    let { page: curPage, limit: current, orderBy, ascdesc, keyword } = queryString.parse(location.search);
+
     if (typeof curPage === 'undefined') {
       curPage = this.state.curPage;
     }
@@ -59,19 +104,33 @@ export default class Category extends React.Component {
     if (typeof ascdesc === 'undefined') {
       ascdesc = this.state.sort.ascdesc;
     }
-    // this.fetchProducts(cond);
+
+    // Slice only price range filter
+    this.filter['$and'] = this.filter['$and'].slice(0, 2);
+
+    // If category id set
+    if (props.params.id) {
+      this.filter['$and'].push({ categoryId: props.params.id });
+    }
+
+    // If search keyword set
+    if (keyword) {
+      this.filter['$and'].push({ keyword });
+    }
+
     this.setState({
-      curPage,
-      perPage: Object.assign({ ...this.state.perPage }, { current }),
-      sort: { field: orderBy, ascdesc }
-    },
-    () => this.fetchProducts(cond));
+        curPage,
+        perPage: Object.assign({ ...this.state.perPage }, { current }),
+        sort: { field: orderBy, ascdesc }
+      },
+      () => this.fetchProducts(JSON.stringify(this.filter))
+    );
   }
 
-  fetchProducts(cond = null) {
+  fetchProducts(filter = null) {
     products(
       {
-        filter: cond,
+        filter,
         orderBy: this.state.sort.field,
         ascdesc: this.state.sort.ascdesc
       },
@@ -80,20 +139,11 @@ export default class Category extends React.Component {
     );
   }
 
-  perPageChange(index, e) {
-    e.preventDefault();
-
-    let paginating = this.state.perPage;
-    paginating.current = paginating.options[index];
-    this.setState({
-      perPage: paginating ,
-      curPage: 1
-    });
-  }
-
-  switchPage(curPage, e) {
-    e.preventDefault();
-    this.setState({ curPage });
+  // Reset price range
+  filterResetHandler() {
+    $(this.refs['price-range']).jRange('setValue', `${this.state.jRange[0]},${this.state.jRange[1]}`);
+    this.filterReset();
+    this.fetchProducts(JSON.stringify(this.filter));
   }
 
   render() {
@@ -136,11 +186,11 @@ export default class Category extends React.Component {
               }
             </ul>
             <div class="filter">
-              <div class="btn-green"><i class="fa fa-remove"></i> сбросить всё</div>
+              <div class="btn-green" onClick={this.filterResetHandler.bind(this)}><i class="fa fa-remove"></i> сбросить всё</div>
               <div class="range-wrapper">
-                <div class="heading-3 fw-500">цена <span id="price-range-from">0</span> - <span id="price-range-to">900</span> грн.</div>
+                <div class="heading-3 fw-500">цена <span ref="price-range-from">{this.state.jRange[0]}</span> - <span ref="price-range-to">{this.state.jRange[1]}</span> грн.</div>
                 <div class="range">
-                  <input type="hidden" id="price-range" class="slider-input" value="750" />
+                  <input type="hidden" ref="price-range" class="slider-input" defaultValue={this.state.jRange[1]} />
                 </div>
               </div>
               <div class="tags-wrapper">
@@ -235,7 +285,7 @@ export default class Category extends React.Component {
                 </li>
                 <li class={classNames('option', {
                     'active': this.state.sort.field === 'price',
-                    'asc':Number(this.state.sort.ascdesc) === -1 && this.state.sort.field === 'price', 
+                    'asc':Number(this.state.sort.ascdesc) === -1 && this.state.sort.field === 'price',
                     'desc':Number(this.state.sort.ascdesc) === 1 && this.state.sort.field === 'price'
                   })}>
                   <Link to={{ pathname: `${location.pathname}`, query: {

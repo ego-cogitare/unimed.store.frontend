@@ -73,21 +73,4 @@ $(document).ready(function() {
     });
     $(window).trigger('resize');
   }
-
-  $('#price-range').jRange({
-    from: 0,
-    to: 900,
-    step: 1,
-    // scale: [0, 25, 50, 75, 100],
-    scale: [],
-    format: '%s',
-    width: 'calc(100% - 25px)',
-    showLabels: false,
-    isRange : true,
-    onstatechange: function(value) {
-      var values = value.split(',');
-      $('#price-range-from').text(values[0]);
-      $('#price-range-to').text(values[1]);
-    }
-  });
 });
