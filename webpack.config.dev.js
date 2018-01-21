@@ -52,14 +52,14 @@ module.exports = {
       template: 'src/staticFiles/index.ejs',
       externalSources: {
         css: [
-          './vendors/font-awesome/css/font-awesome.min.css',
-          './vendors/jRange/jquery.range.css',
-          './vendors/swiper/dist/css/swiper.min.css',
+          '/vendors/font-awesome/css/font-awesome.min.css',
+          '/vendors/jRange/jquery.range.css',
+          '/vendors/swiper/dist/css/swiper.min.css',
         ],
         js: [
-          './vendors/jquery/dist/jquery.min.js',
-          './vendors/swiper/dist/js/swiper.min.js',
-          './vendors/jRange/jquery.range-min.js',
+          '/vendors/jquery/dist/jquery.min.js',
+          '/vendors/swiper/dist/js/swiper.min.js',
+          '/vendors/jRange/jquery.range-min.js',
         ]
       }
     })

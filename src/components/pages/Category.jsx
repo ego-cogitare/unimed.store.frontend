@@ -18,13 +18,17 @@ export default class Category extends React.Component {
       curPage: 1,
       perPage: {
         options: [1, 2, 5],
-        current: 1
+        current: 5
       },
       sortBy: {
-        name: 1,
-        price: -1,
+        name: -1,
+        price: 1,
       },
     };
+  }
+
+  getCategory() {
+    return this.state.categories.find(({ id }) => id === this.props.params.id) || {};
   }
 
   componentDidMount() {
@@ -42,14 +46,37 @@ export default class Category extends React.Component {
 
   resolveState(props) {
     const cond = props.params.id ? `{"categoryId":"${props.params.id}"}` : null;
-    const { page: curPage, limit: current } = queryString.parse(location.search);
-    this.fetchProducts(cond);
-    this.setState({ curPage, perPage: Object.assign({ ...this.state.perPage }, { current }) });
+    let { page: curPage, limit: current, orderName, orderPrice } = queryString.parse(location.search);
+    if (typeof curPage === 'undefined') {
+      curPage = this.state.curPage;
+    }
+    if (typeof current === 'undefined') {
+      current = this.state.perPage.current;
+    }
+    if (typeof orderName === 'undefined') {
+      orderName = this.state.sortBy.name;
+    }
+    if (typeof orderPrice === 'undefined') {
+      orderPrice = this.state.sortBy.price;
+    }
+    // this.fetchProducts(cond);
+    this.setState({
+      curPage,
+      perPage: Object.assign({ ...this.state.perPage }, { current }),
+      sortBy: { name: orderName, price: orderPrice }
+    },
+    () => this.fetchProducts(cond));
   }
 
   fetchProducts(cond = null) {
     products(
-      { filter: cond, orderBy: 'dateCreated', ascdesc: -1 },
+      {
+        filter: cond,
+        // orderBy: 'dateCreated',
+        // ascdesc: -1,
+        orderName: this.state.sortBy.name,
+        orderPrice: this.state.sortBy.price
+      },
       (products) => this.setState({ products }),
       (error)  => console.error(error)
     );
@@ -83,7 +110,7 @@ export default class Category extends React.Component {
             <ul class="menu">
               <li class="item">
                 <Link
-                  to={{ pathname: `/category`, query: { page: this.state.curPage, limit: this.state.perPage.current } }}
+                  to={{ pathname: `/category`, query: { page: 1, limit: this.state.perPage.current } }}
                   activeClassName="active"
                   className="heading-3 fw-600">все</Link>
               </li>
@@ -91,7 +118,7 @@ export default class Category extends React.Component {
                 this.state.categories.map(({ id, title }) => (
                   <li key={id} class="item">
                     <Link
-                      to={{ pathname: `/category/${id}`, query: { page: this.state.curPage, limit: this.state.perPage.current } }}
+                      to={{ pathname: `/category/${id}`, query: { page: 1, limit: this.state.perPage.current } }}
                       activeClassName="active"
                       className="heading-3 fw-600">{title}</Link>
                   </li>
@@ -167,7 +194,14 @@ export default class Category extends React.Component {
                 {
                   this.state.perPage.options.map((option, key) => (
                     <li key={key} class={classNames('option', {'active': option === Number(this.state.perPage.current)})}>
-                      <Link to={{ pathname: `${location.pathname}`, query: { page: 1, limit: option } }}>{option}</Link>
+                      <Link
+                        to={{ pathname: `${location.pathname}`, query: {
+                          page: 1,
+                          limit: option,
+                          orderName: this.state.sortBy.name,
+                          orderPrice: this.state.sortBy.price
+                        }
+                      }}>{option}</Link>
                     </li>
                   ))
                 }
@@ -176,15 +210,27 @@ export default class Category extends React.Component {
                 <li class="option title">
                   <span>Сортировать по:</span>
                 </li>
-                <li class="option desc">
-                  <span>Названию</span>
+                <li class={classNames('option', {'asc': Number(this.state.sortBy.name) === -1, 'desc': Number(this.state.sortBy.name) === 1})}>
+                  <Link to={{ pathname: `${location.pathname}`, query: {
+                      page: 1,
+                      limit: this.state.perPage.current,
+                      orderName: this.state.sortBy.name * -1,
+                      orderPrice: this.state.sortBy.price
+                    }
+                  }}>Названию</Link>
                 </li>
-                <li class="option asc">
-                  <span>Цене</span>
+                <li class={classNames('option', {'asc': Number(this.state.sortBy.price) === -1, 'desc': Number(this.state.sortBy.price) === 1})}>
+                  <Link to={{ pathname: `${location.pathname}`, query: {
+                      page: 1,
+                      limit: this.state.perPage.current,
+                      orderName: this.state.sortBy.name,
+                      orderPrice: this.state.sortBy.price * -1
+                    }
+                  }}>Цене</Link>
                 </li>
               </ul>
             </div>
-            <div class="hr"></div>
+            <div class="hr" />
             <Partials.ProductsList
               products={this.state.products}
               curPage={this.state.curPage}
@@ -216,18 +262,8 @@ export default class Category extends React.Component {
                 </div> :
                 null
             }
-            <div class="hr"></div>
-            {
-
-            }
-            <div class="text-block">
-              <div class="heading-3 fw-600">
-                Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь <br/>от всего сердца.
-              </div>
-              <p class="text">
-                Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч проскальзывает в его святая святых, а я лежу в высокой траве у быстрого ручья и, прильнув к земле, вижу тысячи всевозможных былинок и чувствую, как близок моему сердцу крошечный мирок, что снует между стебельками, наблюдаю эти неисчислимые, непостижимые разновидности червяков и мошек и чувствую близость всемогущего, создавшего нас по своему подобию, веяние вселюбящего, судившего нам парить в вечном блаженстве, когда взор мой туманится и все вокруг меня и небо надо мной запечатлены в моей душе, точно образ возлюбленной, - тогда, дорогой друг, меня часто томит мысль: "Ах! Как бы выразить, как бы вдохнуть в рисунок то, что так полно, так трепетно живет во мне, запечатлеть отражение моей души, как душа моя - отражение предвечного бога!"
-              </p>
-            </div>
+            <div class="hr" />
+            <div class="text-block" dangerouslySetInnerHTML={{ __html: this.getCategory().description }} />
           </div>
         </div>
 
