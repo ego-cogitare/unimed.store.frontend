@@ -15,3 +15,7 @@ export function blog(params, success, error) {
 export function tags(params, success, error) {
     request(`/store/tags`, params, 'get', success, error);
 };
+
+export function categories(params, success, error) {
+    request(`/store/categories`, params, 'get', success, error);
+};

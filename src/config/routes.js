@@ -15,6 +15,10 @@ const routes = {
       path: 'blog',
       component: require('../components/pages/Blog.jsx').default
     },
+    {
+      path: 'category(/:id)',
+      component: require('../components/pages/Category.jsx').default
+    },
   ],
   // Custom route component handler depending of the user type
   custom: {

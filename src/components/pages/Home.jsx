@@ -126,7 +126,9 @@ export default class Home extends React.Component {
           </div>
         </div>
         <div class="wrapper btns-section btns-blog">
-          <div class="btn read-all">читать все</div>
+          <div class="btn read-all">
+            <Link to="/blog">читать все</Link>
+          </div>
         </div>
 
         <Partials.AdvertisingServices />

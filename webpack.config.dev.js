@@ -47,7 +47,7 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({ config: 'config' }),
     new HtmlWebpackPlugin({
-      title: 'Юнимерд::панель администратора',
+      title: 'JUNIMED',
       inject: false,
       template: 'src/staticFiles/index.ejs',
       externalSources: {

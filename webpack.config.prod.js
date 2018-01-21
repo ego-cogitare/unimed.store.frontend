@@ -53,30 +53,19 @@ module.exports = {
       exclude: ['vendors/**/*', 'icons/**/*'],
     }),
     new HtmlWebpackPlugin({
-      title: 'Юнимерд::панель администратора',
+      title: 'JUNIMED',
       inject: false,
       template: 'src/staticFiles/index.ejs',
       externalSources: {
         css: [
           './vendors/font-awesome/css/font-awesome.min.css',
-          './vendors/bootstrap/dist/css/bootstrap.min.css',
-          './vendors/datatable/media/css/dataTables.bootstrap.min.css',
-          './vendors/select2/dist/css/select2.min.css',
-          './vendors/trumbowyg/dist/ui/trumbowyg.min.css',
-          './vendors/trumbowyg/dist/plugins/colors/ui/trumbowyg.colors.min.css',
+          './vendors/jRange/jquery.range.css',
+          './vendors/swiper/dist/css/swiper.min.css',
         ],
         js: [
-          './vendors/jquery/jquery.min.js',
-          './vendors/bootstrap/dist/js/bootstrap.min.js',
-          './vendors/datatable/media/js/jquery.dataTables.min.js',
-          './vendors/datatable/media/js/dataTables.bootstrap.min.js',
-          './vendors/select2/dist/js/select2.full.min.js',
-          './vendors/trumbowyg/dist/trumbowyg.min.js',
-          './vendors/trumbowyg/dist/langs/ru.min.js',
-          './vendors/trumbowyg/dist/plugins/colors/trumbowyg.colors.min.js',
-          './vendors/trumbowyg/dist/plugins/upload/trumbowyg.upload.min.js',
-          './vendors/trumbowyg/dist/plugins/pasteimage/trumbowyg.pasteimage.min.js',
-          './vendors/trumbowyg/dist/plugins/table/trumbowyg.table.min.js',
+          './vendors/jquery/dist/jquery.min.js',
+          './vendors/swiper/dist/js/swiper.min.js',
+          './vendors/jRange/jquery.range-min.js',
         ]
       },
       minify: {
