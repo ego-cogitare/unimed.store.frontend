@@ -11,3 +11,7 @@ export function products(params, success, error) {
 export function blog(params, success, error) {
     request(`/store/blog`, params, 'get', success, error);
 };
+
+export function tags(params, success, error) {
+    request(`/store/tags`, params, 'get', success, error);
+};

@@ -11,6 +11,10 @@ const routes = {
       path: 'contacts',
       component: require('../components/pages/Contacts.jsx').default
     },
+    {
+      path: 'blog',
+      component: require('../components/pages/Blog.jsx').default
+    },
   ],
   // Custom route component handler depending of the user type
   custom: {
