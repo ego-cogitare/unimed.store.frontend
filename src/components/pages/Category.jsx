@@ -20,9 +20,9 @@ export default class Category extends React.Component {
         options: [1, 2, 5],
         current: 5
       },
-      sortBy: {
-        name: -1,
-        price: 1,
+      sort: {
+        field: 'dateCreated',
+        ascdesc: 1,
       },
     };
   }
@@ -46,24 +46,24 @@ export default class Category extends React.Component {
 
   resolveState(props) {
     const cond = props.params.id ? `{"categoryId":"${props.params.id}"}` : null;
-    let { page: curPage, limit: current, orderName, orderPrice } = queryString.parse(location.search);
+    let { page: curPage, limit: current, orderBy, ascdesc } = queryString.parse(location.search);
     if (typeof curPage === 'undefined') {
       curPage = this.state.curPage;
     }
     if (typeof current === 'undefined') {
       current = this.state.perPage.current;
     }
-    if (typeof orderName === 'undefined') {
-      orderName = this.state.sortBy.name;
+    if (typeof orderBy === 'undefined') {
+      orderBy = this.state.sort.field;
     }
-    if (typeof orderPrice === 'undefined') {
-      orderPrice = this.state.sortBy.price;
+    if (typeof ascdesc === 'undefined') {
+      ascdesc = this.state.sort.ascdesc;
     }
     // this.fetchProducts(cond);
     this.setState({
       curPage,
       perPage: Object.assign({ ...this.state.perPage }, { current }),
-      sortBy: { name: orderName, price: orderPrice }
+      sort: { field: orderBy, ascdesc }
     },
     () => this.fetchProducts(cond));
   }
@@ -72,10 +72,8 @@ export default class Category extends React.Component {
     products(
       {
         filter: cond,
-        // orderBy: 'dateCreated',
-        // ascdesc: -1,
-        orderName: this.state.sortBy.name,
-        orderPrice: this.state.sortBy.price
+        orderBy: this.state.sort.field,
+        ascdesc: this.state.sort.ascdesc
       },
       (products) => this.setState({ products }),
       (error)  => console.error(error)
@@ -109,18 +107,30 @@ export default class Category extends React.Component {
           <div class="sitebar">
             <ul class="menu">
               <li class="item">
-                <Link
-                  to={{ pathname: `/category`, query: { page: 1, limit: this.state.perPage.current } }}
+                <Link to={{ pathname: `/category`, query: {
+                      page: 1,
+                      limit: this.state.perPage.current,
+                      orderBy: this.state.sort.field,
+                      ascdesc: this.state.sort.ascdesc
+                    }
+                  }}
                   activeClassName="active"
-                  className="heading-3 fw-600">все</Link>
+                  className="heading-3 fw-600"
+                >все</Link>
               </li>
               {
                 this.state.categories.map(({ id, title }) => (
                   <li key={id} class="item">
-                    <Link
-                      to={{ pathname: `/category/${id}`, query: { page: 1, limit: this.state.perPage.current } }}
+                    <Link to={{ pathname: `/category/${id}`, query: {
+                          page: 1,
+                          limit: this.state.perPage.current,
+                          orderBy: this.state.sort.field,
+                          ascdesc: this.state.sort.ascdesc
+                        }
+                      }}
                       activeClassName="active"
-                      className="heading-3 fw-600">{title}</Link>
+                      className="heading-3 fw-600"
+                    >{title}</Link>
                   </li>
                 ))
               }
@@ -198,8 +208,8 @@ export default class Category extends React.Component {
                         to={{ pathname: `${location.pathname}`, query: {
                           page: 1,
                           limit: option,
-                          orderName: this.state.sortBy.name,
-                          orderPrice: this.state.sortBy.price
+                          orderBy: this.state.sort.field,
+                          ascdesc: this.state.sort.ascdesc
                         }
                       }}>{option}</Link>
                     </li>
@@ -210,21 +220,29 @@ export default class Category extends React.Component {
                 <li class="option title">
                   <span>Сортировать по:</span>
                 </li>
-                <li class={classNames('option', {'asc': Number(this.state.sortBy.name) === -1, 'desc': Number(this.state.sortBy.name) === 1})}>
+                <li class={classNames('option', {
+                    'active':this.state.sort.field === 'title',
+                    'asc':Number(this.state.sort.ascdesc) === -1 && this.state.sort.field === 'title',
+                    'desc':Number(this.state.sort.ascdesc) === 1 && this.state.sort.field === 'title'
+                  })}>
                   <Link to={{ pathname: `${location.pathname}`, query: {
                       page: 1,
                       limit: this.state.perPage.current,
-                      orderName: this.state.sortBy.name * -1,
-                      orderPrice: this.state.sortBy.price
+                      orderBy: 'title',
+                      ascdesc: this.state.sort.ascdesc * -1
                     }
                   }}>Названию</Link>
                 </li>
-                <li class={classNames('option', {'asc': Number(this.state.sortBy.price) === -1, 'desc': Number(this.state.sortBy.price) === 1})}>
+                <li class={classNames('option', {
+                    'active': this.state.sort.field === 'price',
+                    'asc':Number(this.state.sort.ascdesc) === -1 && this.state.sort.field === 'price', 
+                    'desc':Number(this.state.sort.ascdesc) === 1 && this.state.sort.field === 'price'
+                  })}>
                   <Link to={{ pathname: `${location.pathname}`, query: {
                       page: 1,
                       limit: this.state.perPage.current,
-                      orderName: this.state.sortBy.name,
-                      orderPrice: this.state.sortBy.price * -1
+                      orderBy: 'price',
+                      ascdesc: this.state.sort.ascdesc * -1
                     }
                   }}>Цене</Link>
                 </li>
@@ -250,7 +268,13 @@ export default class Category extends React.Component {
                       return (
                         <div key={key} class={classNames('page', {'active': key === this.state.curPage - 1})}>
                           <Link
-                            to={{ pathname: `${location.pathname}`, query: { page: key + 1, limit: this.state.perPage.current } }}
+                            to={{ pathname: `${location.pathname}`, query: {
+                              page: key + 1,
+                              limit: this.state.perPage.current,
+                              orderBy: this.state.sort.field,
+                              ascdesc: this.state.sort.ascdesc
+                            }
+                          }}
                           >{key + 1}</Link>
                         </div>
                       );
