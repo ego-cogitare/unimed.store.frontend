@@ -42,6 +42,9 @@ export default class Category extends React.Component {
           price: {
             "$lte": this.state.jRange[1]
           }
+        },
+        {
+          keyword: this.keyword
         }
       ]
     };
@@ -105,6 +108,8 @@ export default class Category extends React.Component {
       ascdesc = this.state.sort.ascdesc;
     }
 
+    this.keyword = '';
+
     // Slice only price range filter
     this.filter['$and'] = this.filter['$and'].slice(0, 2);
 
@@ -116,6 +121,7 @@ export default class Category extends React.Component {
     // If search keyword set
     if (keyword) {
       this.filter['$and'].push({ keyword });
+      this.keyword = keyword;
     }
 
     this.setState({
@@ -175,7 +181,7 @@ export default class Category extends React.Component {
                           page: 1,
                           limit: this.state.perPage.current,
                           orderBy: this.state.sort.field,
-                          ascdesc: this.state.sort.ascdesc
+                          ascdesc: this.state.sort.ascdesc,
                         }
                       }}
                       activeClassName="active"
@@ -259,7 +265,8 @@ export default class Category extends React.Component {
                           page: 1,
                           limit: option,
                           orderBy: this.state.sort.field,
-                          ascdesc: this.state.sort.ascdesc
+                          ascdesc: this.state.sort.ascdesc,
+                          keyword: this.keyword
                         }
                       }}>{option}</Link>
                     </li>
@@ -279,7 +286,8 @@ export default class Category extends React.Component {
                       page: 1,
                       limit: this.state.perPage.current,
                       orderBy: 'title',
-                      ascdesc: this.state.sort.ascdesc * -1
+                      ascdesc: this.state.sort.ascdesc * -1,
+                      keyword: this.keyword
                     }
                   }}>Названию</Link>
                 </li>
@@ -292,7 +300,8 @@ export default class Category extends React.Component {
                       page: 1,
                       limit: this.state.perPage.current,
                       orderBy: 'price',
-                      ascdesc: this.state.sort.ascdesc * -1
+                      ascdesc: this.state.sort.ascdesc * -1,
+                      keyword: this.keyword
                     }
                   }}>Цене</Link>
                 </li>
@@ -322,7 +331,8 @@ export default class Category extends React.Component {
                               page: key + 1,
                               limit: this.state.perPage.current,
                               orderBy: this.state.sort.field,
-                              ascdesc: this.state.sort.ascdesc
+                              ascdesc: this.state.sort.ascdesc,
+                              keyword: this.keyword
                             }
                           }}
                           >{key + 1}</Link>

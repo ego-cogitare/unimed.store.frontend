@@ -8,13 +8,11 @@ export default class BlockTitle extends React.Component {
 
   render() {
     return (
-      <div class="wrapper">
-        <div class="section-header ">
-          <div class="title-wrapper">
-            <div class="heading-1">{this.props.title}</div>
-          </div>
-          <div class="description">{this.props.description}</div>
+      <div class={classNames('section-header', this.props.className)}>
+        <div class="title-wrapper">
+          <div class="heading-1">{this.props.title}</div>
         </div>
+        <div class="description">{this.props.description}</div>
       </div>
     );
   }

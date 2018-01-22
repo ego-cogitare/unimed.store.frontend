@@ -52,7 +52,9 @@ export default class Home extends React.Component {
       <section>
         <Partials.AdvertisingServices />
 
-        <Partials.BlockTitle title="Наши бренды" />
+        <div class="wrapper">
+          <Partials.BlockTitle title="Наши бренды" />
+        </div>
         <div class="wrapper">
           <div id="brands-slider" class="swiper-container">
             <ul class="swiper-wrapper">
@@ -77,17 +79,19 @@ export default class Home extends React.Component {
           </div>
         </div>
 
-        <Partials.BlockTitle title="Новинки" description="впервые в продаже" />
         <div class="wrapper">
-          <div class="wrapper">
-            <Partials.ProductsList
-              products={this.state.productsNew}
-              className="new"
-            />
-          </div>
+          <Partials.BlockTitle title="Новинки" description="впервые в продаже" />
+        </div>
+        <div class="wrapper">
+          <Partials.ProductsList
+            products={this.state.productsNew}
+            className="new"
+          />
         </div>
 
-        <Partials.BlockTitle title="Акция" description="лимитированные товары" />
+        <div class="wrapper">
+          <Partials.BlockTitle title="Акция" description="лимитированные товары" />
+        </div>
         <div class="wrapper">
           <Partials.ProductsList
             products={this.state.productsAction}
@@ -103,7 +107,9 @@ export default class Home extends React.Component {
           </div>
         </div>
 
-        <Partials.BlockTitle title="Блог" description="полезные статьи" />
+        <div class="wrapper">
+          <Partials.BlockTitle title="Блог" description="полезные статьи" />
+        </div>
         <div class="wrapper">
           <div class="blog-preview">
           {

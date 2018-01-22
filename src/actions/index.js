@@ -8,6 +8,10 @@ export function products(params, success, error) {
     request(`/store/products`, params, 'get', success, error);
 };
 
+export function product({ id }, success, error) {
+    request(`/store/product/${id}`, {}, 'get', success, error);
+};
+
 export function blog(params, success, error) {
     request(`/store/blog`, params, 'get', success, error);
 };

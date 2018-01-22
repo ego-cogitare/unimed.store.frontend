@@ -29,7 +29,7 @@ export default class ProductsList extends React.Component {
                   </div>
                   <div class="icon"></div>
                   <div class="title"><span class="brand">{brand ? brand.title : ''}</span> {title}</div>
-                  <div class="price">{currencyIcon('USD')} {price.toFixed(2)}</div>
+                  <div class="price">{currencyIcon(Settings.get('currencyCode'))} {price.toFixed(2)}</div>
                   <div class="btn-green btn-buy">
                     <Link to={`/product/${id}`}>
                       {this.props.buyBtnText || 'Купить'}

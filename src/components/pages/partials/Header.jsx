@@ -19,7 +19,14 @@ export default class Header extends React.Component {
           <ul class="search-cart right">
             <li class="search">
               <i class="fa fa-search"></i>
-              <input type="text" id="keyword" class="input" name="q" value="" placeholder="Искать..." />
+              <input type="text" id="keyword" class="input"
+                name="keyword"
+                onKeyDown={(e) => {
+                  if (e.which === 13 && e.target.value.length >=3) {
+                    location.href = `/category?keyword=${e.target.value}`;
+                  }
+                }}
+                defaultValue="" placeholder="Искать..." />
             </li>
             <li class="delimiter">
               <i></i>

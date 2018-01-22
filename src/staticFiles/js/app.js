@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   $('.search-cart .fa-search').on('click', function(e) {
     e.preventDefault();
-    $(this).parent().toggleClass('expanded');
+    $(this).next().focus().closest('.search').toggleClass('expanded');
   });
 
   new Swiper('#home-slider-01', {
