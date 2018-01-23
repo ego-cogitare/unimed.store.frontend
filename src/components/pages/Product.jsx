@@ -3,7 +3,7 @@ import Moment from 'moment';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import Partials from './partials';
-import { buildUrl, currencyIcon } from '../../core/helpers/Utils';
+import { buildUrl, currencyIcon, viewHistoryPush, viewHistoryList } from '../../core/helpers/Utils';
 import Settings from '../../core/helpers/Settings';
 import { product } from '../../actions';
 
@@ -21,7 +21,8 @@ export default class Product extends React.Component {
         relatedProducts: [],
         pictures: [],
       },
-      currencyCode: currencyIcon(Settings.get('currencyCode'))
+      currencyCode: currencyIcon(Settings.get('currencyCode')),
+      historyList: []
     };
   }
 
@@ -35,18 +36,23 @@ export default class Product extends React.Component {
             paginationClickable: false,
             spaceBetween: 5,
             mousewheelControl: true,
-            speed: 300,
-            // onClick: function(swiper) {
-            //   $thumbnailsSlider.find('.swiper-slide').removeClass('swiper-slide-active');
-            //   $thumbnailsSlider.find('.swiper-slide:eq(' + swiper.clickedIndex + ')').addClass('swiper-slide-active');
-            // },
+            speed: 300
           });
   }
 
-  fetchProduct(props, callback) {
+  fetchProduct(props) {
     product(
       { id: props.params.id },
-      (product) => this.setState({ product }, this.initSlider),
+      (product) => this.setState({
+        product,
+        historyList: viewHistoryList().filter(({id}) => id !== this.props.params.id)
+      },
+      () => {
+        // Initialize product slider
+        this.initSlider();
+        // Add product to view history
+        viewHistoryPush(product);
+      }),
       (error)  => console.error(error)
     );
   }
@@ -104,47 +110,19 @@ export default class Product extends React.Component {
                   </div>
                 </div>
               </div>
-              <div class="history">
-                <Partials.BlockTitle title="вы уже смотрели" className="text-left no-margin" />
-                <div class="products-list">
-                  <div class="product new no-hover-border no-hover-btn">
-                    <div class="product-wrapper">
-                      <div class="picture">
-                        <a href="#">
-                          <img src="img/products/product-01.jpg" alt="луковые хлебцы" />
-                        </a>
-                      </div>
-                      <div class="icon"></div>
-                      <div class="title"><span class="brand">Le Pain des fleurts</span> луковые хлебцы</div>
-                      <div class="price">$ 75.00</div>
-                      <div class="btn-green btn-buy">
-                        <a href="#">Купить</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="product new no-hover-border no-hover-btn">
-                    <div class="product-wrapper">
-                      <div class="picture">
-                        <a href="#">
-                          <img src="img/products/product-01.jpg" alt="луковые хлебцы" />
-                        </a>
-                      </div>
-                      <div class="icon"></div>
-                      <div class="title"><span class="brand">Le Pain des fleurts</span> луковые хлебцы</div>
-                      <div class="price">$ 75.00</div>
-                      <div class="btn-green btn-buy">
-                        <a href="#">Купить</a>
-                      </div>
-                    </div>
-                  </div>
+              {
+                this.state.historyList.length > 0 &&
+                <div class="history">
+                  <Partials.BlockTitle title="вы уже смотрели" className="text-left no-margin" />
+                  <Partials.ProductsList products={this.state.historyList.slice(0, 2)} />
                 </div>
-              </div>
+              }
             </div>
             <div class="column left clear">
               <div class="general-info left">
                 <div class="hr"></div>
                 <div class="sku-brand">
-                  <span>Артикул: 102605</span><i class="divider"></i><span>Бренд: {this.state.product.brand.title}</span>
+                  <span>Артикул: {this.state.product.sku}</span><i class="divider"></i><span>Бренд: {this.state.product.brand.title}</span>
                 </div>
                 <div class="hr"></div>
                 <div class="clear">
@@ -198,6 +176,10 @@ export default class Product extends React.Component {
                         <p><span class="fw-600">Производитель:</span> Китай</p>
                       </div>
                       <p class="text">
+                        { this.state.product.briefly }
+                      </p>
+                      {/*
+                      <p class="text">
                         Этот электрический нагрудный насос позволит вам выражать молоко спокойно и незаметно,
                         поэтому он идеально подходит для занятого образа жизни. Поскольку он компактный и легкий,
                         он отлично подходит для ежедневной электрической накачки.
@@ -207,10 +189,13 @@ export default class Product extends React.Component {
                         Технология 2-фазной экспрессии откачивает больше молока за меньшее время. Он имитирует
                         естественное сосание ребенка с первоначальным быстрым ритмом накачки, чтобы начать
                         протекание молока, а затем медленный ритм накачки, чтобы мягко и эфеективно выражать молоко.
-                      </p>
-                      <div class="btn btn-youtube">
-                        <a href="#"><i class="fa fa-youtube-play"></i> обзор на youtube</a>
-                      </div>
+                      </p>*/}
+                      {
+                        this.state.product.video &&
+                        <div class="btn btn-youtube">
+                          <a href={this.state.product.video} target="_blank"><i class="fa fa-youtube-play"></i> обзор на youtube</a>
+                        </div>
+                      }
                     </div>
                     <div id="tab-votes" class="tab-content">votes</div>
                   </div>
@@ -241,15 +226,10 @@ export default class Product extends React.Component {
               <Partials.ProductsList products={this.state.product.relatedProducts} />
             </div>
           }
-
-          <div class="text-block text-center">
-            <div class="heading-3 fw-600">
-              Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца.
-            </div>
-            <p class="text">
-              Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч проскальзывает в его святая святых, а я лежу в высокой траве у быстрого ручья и, прильнув к земле, вижу тысячи всевозможных былинок и чувствую, как близок моему сердцу крошечный мирок, что снует между стебельками, наблюдаю эти неисчислимые, непостижимые разновидности червяков и мошек и чувствую близость всемогущего, создавшего нас по своему подобию, веяние вселюбящего, судившего нам парить в вечном блаженстве, когда взор мой туманится и все вокруг меня и небо надо мной запечатлены в моей душе, точно образ возлюбленной, - тогда, дорогой друг, меня часто томит мысль: "Ах! Как бы выразить, как бы вдохнуть в рисунок то, что так полно, так трепетно живет во мне, запечатлеть отражение моей души, как душа моя - отражение предвечного бога!"
-            </p>
-          </div>
+          <div
+            class="text-block text-center"
+            dangerouslySetInnerHTML={{ __html: this.state.product.description }}
+          />
         </div>
 
         <Partials.AdvertisingServices />
