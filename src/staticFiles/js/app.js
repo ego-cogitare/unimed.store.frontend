@@ -18,24 +18,6 @@ $(document).ready(function() {
     speed: 1000
   });
 
-  var $thumbnailsSlider = $('#product-thumbnails')
-    , productSlider = new Swiper($thumbnailsSlider, {
-        direction: 'vertical',
-        slidesPerView: 4,
-        nextButton: '#product-thumbnails ~ .button-next',
-        prevButton: '#product-thumbnails ~ .button-prev',
-        paginationClickable: true,
-        // autoplay: 3000,
-        // loop: true,
-        spaceBetween: 5,
-        mousewheelControl: true,
-        speed: 300,
-        onClick: function(swiper) {
-          $thumbnailsSlider.find('.swiper-slide').removeClass('swiper-slide-active');
-          $thumbnailsSlider.find('.swiper-slide:eq(' + swiper.clickedIndex + ')').addClass('swiper-slide-active');
-        },
-      });
-
   if ($('#brands-slider').length !== 0)
   {
     var brandSlider = new Swiper('#brands-slider', {

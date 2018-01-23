@@ -1,6 +1,7 @@
 import React from 'react';
 import Moment from 'moment';
 import { Link } from 'react-router';
+import classNames from 'classnames';
 import Partials from './partials';
 import { buildUrl, currencyIcon } from '../../core/helpers/Utils';
 import Settings from '../../core/helpers/Settings';
@@ -13,20 +14,66 @@ export default class Product extends React.Component {
 
     this.state = {
       product: {
+        price: 0,
         brand: {},
+        picture: {},
         category: {},
         relatedProducts: [],
-        pictures: []
-      }
+        pictures: [],
+      },
+      currencyCode: currencyIcon(Settings.get('currencyCode'))
     };
   }
 
-  componentDidMount() {
+  initSlider() {
+    const $thumbnailsSlider = $('#product-thumbnails')
+        , productSlider = new Swiper($thumbnailsSlider, {
+            direction: 'vertical',
+            slidesPerView: 4,
+            nextButton: '#product-thumbnails ~ .button-next',
+            prevButton: '#product-thumbnails ~ .button-prev',
+            paginationClickable: false,
+            spaceBetween: 5,
+            mousewheelControl: true,
+            speed: 300,
+            // onClick: function(swiper) {
+            //   $thumbnailsSlider.find('.swiper-slide').removeClass('swiper-slide-active');
+            //   $thumbnailsSlider.find('.swiper-slide:eq(' + swiper.clickedIndex + ')').addClass('swiper-slide-active');
+            // },
+          });
+  }
+
+  fetchProduct(props, callback) {
     product(
-      { id: this.props.params.id },
-      (product) => this.setState({ product }),
+      { id: props.params.id },
+      (product) => this.setState({ product }, this.initSlider),
       (error)  => console.error(error)
     );
+  }
+
+  componentDidMount() {
+    this.fetchProduct(this.props);
+  }
+
+  componentWillReceiveProps(props) {
+    this.fetchProduct(props);
+  }
+
+  calcDiscountPrice() {
+    let price = this.state.product.price;
+
+    if (this.state.product.discountType === 'const') {
+      price = this.state.product.price - this.state.product.discount;
+    }
+    if (this.state.product.discountType === '%') {
+      price = this.state.product.price * (1 - 0.01 * this.state.product.discount);
+    }
+    return price.toFixed(2);
+  }
+
+  setProductPicture(picture) {
+    this.state.product.picture = picture;
+    this.setState({ product: this.state.product });
   }
 
   render() {
@@ -41,15 +88,11 @@ export default class Product extends React.Component {
                 <div class="product-thumbnails left">
                   <div id="product-thumbnails" class="swiper-container">
                     <ul class="swiper-wrapper">
-                      {/*
-                      <li class="swiper-slide" style="background-image: url('img/products/view/large/01.jpg')"></li>
-                      <li class="swiper-slide" style="background-image: url('img/products/view/large/01.jpg')"></li>
-                      <li class="swiper-slide" style="background-image: url('img/products/view/large/01.jpg')"></li>
-                      <li class="swiper-slide" style="background-image: url('img/products/view/large/01.jpg')"></li>
-                      <li class="swiper-slide" style="background-image: url('img/products/view/large/01.jpg')"></li>
-                      <li class="swiper-slide" style="background-image: url('img/products/view/large/01.jpg')"></li>
-                      <li class="swiper-slide" style="background-image: url('img/products/view/large/01.jpg')"></li>
-                      */}
+                      {
+                        this.state.product.pictures.map((picture) => (
+                          <li key={picture.id} class={classNames('swiper-slide', {'active': this.state.product.picture.id === picture.id})} onClick={this.setProductPicture.bind(this, picture)} style={{backgroundImage: `url("${buildUrl(picture)}")`}}></li>
+                        ))
+                      }
                     </ul>
                   </div>
                   <div class="navigate button-prev fa fa-angle-up"></div>
@@ -57,7 +100,7 @@ export default class Product extends React.Component {
                 </div>
                 <div class="left">
                   <div class="product-photo">
-                    <img src="img/products/view/large/01.jpg" alt="" />
+                    <img src={buildUrl(this.state.product.picture)} alt={this.state.product.title} />
                   </div>
                 </div>
               </div>
@@ -108,11 +151,11 @@ export default class Product extends React.Component {
                   {
                     this.state.product.discountType ?
                       <div class="price left">
-                        <span>{currencyIcon(Settings.get('currencyCode'))} 99.99</span>
-                        <span class="old">$ 125.00</span>
+                        <span>{this.state.currencyCode} {this.calcDiscountPrice()}</span>
+                        <span class="old">{this.state.currencyCode} {this.state.product.price.toFixed(2)}</span>
                       </div> :
                       <div class="price left">
-                        <span>{currencyIcon(Settings.get('currencyCode'))} {this.state.product.price}</span>
+                        <span>{this.state.currencyCode} {this.state.product.price.toFixed(2)}</span>
                       </div>
                   }
                   <div class="counter left">
@@ -186,94 +229,19 @@ export default class Product extends React.Component {
               </div>
             </div>
           </div>
-          <div class="wrapper">
-            <Partials.BlockTitle title="вам может понравиться" />
-          </div>
-          <div class="wrapper">
-            <Partials.ProductsList
-              products={this.state.product.relatedProducts}
-            />
-          </div>
 
-          <div class="wrapper">
-            <div class="products-list">
-              <div class="product new">
-                <div class="product-wrapper">
-                  <div class="picture">
-                    <a href="#">
-                      <img src="img/products/product-01.jpg" alt="луковые хлебцы" />
-                    </a>
-                  </div>
-                  <div class="icon"></div>
-                  <div class="title"><span class="brand">Le Pain des fleurts</span> луковые хлебцы</div>
-                  <div class="price">$ 75.00</div>
-                  <div class="btn-green btn-buy">
-                    <a href="#">Купить</a>
-                  </div>
-                </div>
-              </div>
-              <div class="product new">
-                <div class="product-wrapper">
-                  <div class="picture">
-                    <a href="#">
-                      <img src="img/products/product-02.jpg" alt="SPF 50+" />
-                    </a>
-                  </div>
-                  <div class="icon"></div>
-                  <div class="title"><span class="brand">BioSolis</span> SPF 50+</div>
-                  <div class="price">$ 75.00</div>
-                  <div class="btn-green btn-buy">
-                    <a href="#">Купить</a>
-                  </div>
-                </div>
-              </div>
-              <div class="product new">
-                <div class="product-wrapper">
-                  <div class="picture">
-                    <a href="#">
-                      <img src="img/products/product-03.jpg" alt="бутылочка" />
-                    </a>
-                  </div>
-                  <div class="icon"></div>
-                  <div class="title"><span class="brand">Medela</span> бутылочка</div>
-                  <div class="price">$ 75.00</div>
-                  <div class="btn-green btn-buy">
-                    <a href="#">Купить</a>
-                  </div>
-                </div>
-              </div>
-              <div class="product new">
-                <div class="product-wrapper">
-                  <div class="picture">
-                    <a href="#">
-                      <img src="img/products/product-04.jpg" alt="луковые хлебцы" />
-                    </a>
-                  </div>
-                  <div class="icon"></div>
-                  <div class="title"><span class="brand">Le Pain des fleurts</span> луковые хлебцы</div>
-                  <div class="price">$ 75.00</div>
-                  <div class="btn-green btn-buy">
-                    <a href="#">Купить</a>
-                  </div>
-                </div>
-              </div>
-              <div class="product new">
-                <div class="product-wrapper">
-                  <div class="picture">
-                    <a href="#">
-                      <img src="img/products/product-01.jpg" alt="луковые хлебцы" />
-                    </a>
-                  </div>
-                  <div class="icon"></div>
-                  <div class="title"><span class="brand">Le Pain des fleurts</span> луковые хлебцы</div>
-                  <div class="price">$ 75.00</div>
-                  <div class="btn-green btn-buy">
-                    <a href="#">Купить</a>
-                  </div>
-                </div>
-              </div>
+          {/* Related products */
+            this.state.product.relatedProducts.length > 0 &&
+            <div class="wrapper">
+              <Partials.BlockTitle title="вам может понравиться" />
             </div>
-          </div>
+          }{
+            this.state.product.relatedProducts.length > 0 &&
+            <div class="wrapper">
+              <Partials.ProductsList products={this.state.product.relatedProducts} />
+            </div>
+          }
+
           <div class="text-block text-center">
             <div class="heading-3 fw-600">
               Душа моя озарена неземной радостью, как эти чудесные весенние утра, которыми я наслаждаюсь от всего сердца.
