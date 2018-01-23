@@ -22,7 +22,14 @@ export default class Product extends React.Component {
         pictures: [],
       },
       currencyCode: currencyIcon(Settings.get('currencyCode')),
-      historyList: []
+      historyList: [],
+      productTab: 'description',
+      discountTimeout: {
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
+      },
+      discountTimeLeft: 0
     };
   }
 
@@ -45,16 +52,65 @@ export default class Product extends React.Component {
       { id: props.params.id },
       (product) => this.setState({
         product,
+        // product: Object.assign(product, { discountTimeout: '' }),
         historyList: viewHistoryList().filter(({id}) => id !== this.props.params.id)
       },
       () => {
         // Initialize product slider
         this.initSlider();
+
         // Add product to view history
         viewHistoryPush(product);
+
+        // Initialize discount ticker/check timer
+        this.initDiscountTimer(product.discountTimeout);
       }),
       (error)  => console.error(error)
     );
+  }
+
+  initDiscountTimer(timeout) {
+    // If timeout discount not set
+    if (!timeout) {
+      return ;
+    }
+    if (timeout && timeout - 0.001 * Date.now() > 0) {
+      setInterval(() => {
+        // Time left to discount period is over
+        const timeLeft = timeout - Math.ceil(0.001 * Date.now());
+
+        // Calculate hours/minutes/seconds to period end
+        const hours = Math.floor(timeLeft / 3600);
+        const minutes = Math.floor((timeLeft - hours * 3600) / 60);
+        const seconds = timeLeft % 60;
+
+        this.setState({
+            discountTimeout: {
+              hours: String(hours),
+              minutes: ('0' + minutes).slice(-2),
+              seconds: ('0' + seconds).slice(-2)
+            },
+            discountTimeLeft: timeLeft
+          },
+          () => {
+            // Check if discount time is over
+            if (timeLeft <= 0) {
+              this.setState({
+                product: Object.assign(this.state.product, { discountType: '' })
+              });
+            }
+          }
+        );
+      },
+      1000);
+    }
+    // Discount time is over
+    else
+    {
+      this.setState({
+        product: Object.assign(this.state.product, { discountType: '' })
+      });
+    }
   }
 
   componentDidMount() {
@@ -82,11 +138,18 @@ export default class Product extends React.Component {
     this.setState({ product: this.state.product });
   }
 
+  setProductTab(productTab, e) {
+    e.preventDefault();
+    this.setState({ productTab });
+  }
+
   render() {
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'Каталог', this.state.product.title]} title={this.state.product.title} />
-
+        <Partials.PageTitle
+          breadcumbs={['Главная', 'Каталог', this.state.product.title]}
+          title={this.state.product.title}
+        />
         <div class="wrapper product-page">
           <div class="product-view clear">
             <div class="column left">
@@ -94,11 +157,15 @@ export default class Product extends React.Component {
                 <div class="product-thumbnails left">
                   <div id="product-thumbnails" class="swiper-container">
                     <ul class="swiper-wrapper">
-                      {
-                        this.state.product.pictures.map((picture) => (
-                          <li key={picture.id} class={classNames('swiper-slide', {'active': this.state.product.picture.id === picture.id})} onClick={this.setProductPicture.bind(this, picture)} style={{backgroundImage: `url("${buildUrl(picture)}")`}}></li>
-                        ))
-                      }
+                    {
+                      this.state.product.pictures.map((picture) => (
+                        <li key={picture.id}
+                            class={classNames('swiper-slide', {'active': this.state.product.picture.id === picture.id})}
+                            onClick={this.setProductPicture.bind(this, picture)}
+                            style={{backgroundImage: `url("${buildUrl(picture)}")`}}
+                        ></li>
+                      ))
+                    }
                     </ul>
                   </div>
                   <div class="navigate button-prev fa fa-angle-up"></div>
@@ -126,33 +193,50 @@ export default class Product extends React.Component {
                 </div>
                 <div class="hr"></div>
                 <div class="clear">
-                  {
-                    this.state.product.discountType ?
-                      <div class="price left">
-                        <span>{this.state.currencyCode} {this.calcDiscountPrice()}</span>
-                        <span class="old">{this.state.currencyCode} {this.state.product.price.toFixed(2)}</span>
-                      </div> :
-                      <div class="price left">
-                        <span>{this.state.currencyCode} {this.state.product.price.toFixed(2)}</span>
-                      </div>
-                  }
-                  <div class="counter left">
-                    <span>через</span>
-                    <div class="timer clear" id="timer">
-                      <div class="digit hrs left">
-                        <span>1</span><span>9</span>
-                      </div>
-                      <span class="left">:</span>
-                      <div class="digit min left">
-                        <span>0</span><span>2</span>
-                      </div>
-                      <span class="left">:</span>
-                      <div class="digit sec left">
-                        <span>3</span><span>6</span>
-                      </div>
+                {
+                  this.state.product.discountType ?
+                  <div>
+                    <div class="price left">
+                      <span>{this.state.currencyCode} {this.calcDiscountPrice()}</span>
+                      <span class="old">{this.state.currencyCode} {this.state.product.price.toFixed(2)}</span>
                     </div>
-                    <span>цена на товар <br/> изменится</span>
+                    { /* If some discount time not end */
+                      this.state.discountTimeLeft > 0 &&
+                      <div class="counter left">
+                        <span>через</span>
+                        <div class="timer clear" id="timer">
+                          <div class="digit hrs left">
+                            {
+                              this.state.discountTimeout.hours.split('').map((number, key) => (
+                                <span key={key}>{number}</span>
+                              ))
+                            }
+                          </div>
+                          <span class="left">:</span>
+                          <div class="digit min left">
+                            {
+                              this.state.discountTimeout.minutes.split('').map((number, key) => (
+                                <span key={key}>{number}</span>
+                              ))
+                            }
+                          </div>
+                          <span class="left">:</span>
+                          <div class="digit sec left">
+                            {
+                              this.state.discountTimeout.seconds.split('').map((number, key) => (
+                                <span key={key}>{number}</span>
+                              ))
+                            }
+                          </div>
+                        </div>
+                        <span>цена на товар <br/> изменится</span>
+                      </div>
+                    }
+                  </div> :
+                  <div class="price left">
+                    <span>{this.state.currencyCode} {this.state.product.price.toFixed(2)}</span>
                   </div>
+                }
                 </div>
                 <div class="clear buy-btns">
                   <div class="btn btn-green left">добавить в корзину</div>
@@ -161,43 +245,41 @@ export default class Product extends React.Component {
                 <div class="hr"></div>
                 <div class="tabs-wrapper">
                   <ul class="tabs clear">
-                    <li class="left active">
-                      <a href="#tab-description">описание продукта</a>
+                    <li class={classNames('left', {'active': this.state.productTab === 'description'})}>
+                      <a href="#tab-description" onClick={this.setProductTab.bind(this, 'description')}>описание продукта</a>
                     </li>
-                    <li class="left">
-                      <a href="#tab-votes">отзывы</a>
+                    <li class={classNames('left', {'active': this.state.productTab === 'reviews'})}>
+                      <a href="#tab-votes" onClick={this.setProductTab.bind(this, 'reviews')}>отзывы</a>
                     </li>
                   </ul>
                   <div class="tabs-content">
-                    <div id="tab-description" class="tab-content visible">
-                      <div class="properties">
-                        <p><span class="fw-600">Материал:</span> Эко пластик</p>
-                        <p><span class="fw-600">Еще инфо:</span> Medela</p>
-                        <p><span class="fw-600">Производитель:</span> Китай</p>
-                      </div>
-                      <p class="text">
-                        { this.state.product.briefly }
-                      </p>
-                      {/*
-                      <p class="text">
-                        Этот электрический нагрудный насос позволит вам выражать молоко спокойно и незаметно,
-                        поэтому он идеально подходит для занятого образа жизни. Поскольку он компактный и легкий,
-                        он отлично подходит для ежедневной электрической накачки.
-                      </p>
-                      <p class="text">
-                        <br/>
-                        Технология 2-фазной экспрессии откачивает больше молока за меньшее время. Он имитирует
-                        естественное сосание ребенка с первоначальным быстрым ритмом накачки, чтобы начать
-                        протекание молока, а затем медленный ритм накачки, чтобы мягко и эфеективно выражать молоко.
-                      </p>*/}
-                      {
-                        this.state.product.video &&
-                        <div class="btn btn-youtube">
-                          <a href={this.state.product.video} target="_blank"><i class="fa fa-youtube-play"></i> обзор на youtube</a>
+                    {
+                      this.state.productTab === 'description' &&
+                      <div id="tab-description" class="tab-content visible">
+                        <div class="properties">
+                          <p><span class="fw-600">Материал:</span> Эко пластик</p>
+                          <p><span class="fw-600">Еще инфо:</span> Medela</p>
+                          <p><span class="fw-600">Производитель:</span> Китай</p>
                         </div>
-                      }
-                    </div>
-                    <div id="tab-votes" class="tab-content">votes</div>
+                        <p class="text">
+                          { this.state.product.briefly }
+                        </p>
+                        {
+                          this.state.product.video &&
+                          <div class="btn btn-youtube">
+                            <a href={this.state.product.video} target="_blank"><i class="fa fa-youtube-play"></i> обзор на youtube</a>
+                          </div>
+                        }
+                      </div>
+                    }
+                    {
+                      this.state.productTab === 'reviews' &&
+                      <div id="tab-votes" class="tab-content visible">
+                        <div class="properties">
+                          votes
+                        </div>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
@@ -214,7 +296,6 @@ export default class Product extends React.Component {
               </div>
             </div>
           </div>
-
           {/* Related products */
             this.state.product.relatedProducts.length > 0 &&
             <div class="wrapper">
@@ -226,12 +307,9 @@ export default class Product extends React.Component {
               <Partials.ProductsList products={this.state.product.relatedProducts} />
             </div>
           }
-          <div
-            class="text-block text-center"
-            dangerouslySetInnerHTML={{ __html: this.state.product.description }}
-          />
+          <div class="text-block text-center"
+               dangerouslySetInnerHTML={{ __html: this.state.product.description }} />
         </div>
-
         <Partials.AdvertisingServices />
       </section>
     );

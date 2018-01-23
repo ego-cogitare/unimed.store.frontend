@@ -12,6 +12,9 @@ export function currencyIcon(code) {
   return currencies[code];
 };
 
+/*
+ * Viewed products hitstory add
+ */
 export function viewHistoryPush(product) {
   let history = JSON
     .parse(localStorage.getItem('viewHistory') || '[]')
@@ -32,6 +35,9 @@ export function viewHistoryPush(product) {
   return history;
 };
 
+/*
+ * Viewed products hitstory list
+ */
 export function viewHistoryList(limit = 5) {
   return JSON.parse(localStorage.getItem('viewHistory') || '[]').slice(-1 * limit);
 };
