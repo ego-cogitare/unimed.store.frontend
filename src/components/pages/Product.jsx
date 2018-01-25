@@ -20,6 +20,7 @@ export default class Product extends React.Component {
         category: {},
         relatedProducts: [],
         pictures: [],
+        properties: [],
       },
       currencyCode: currencyIcon(Settings.get('currencyCode')),
       historyList: [],
@@ -253,14 +254,21 @@ export default class Product extends React.Component {
                     </li>
                   </ul>
                   <div class="tabs-content">
-                    {
+                    { /* If product desctiption tab is active */
                       this.state.productTab === 'description' &&
                       <div id="tab-description" class="tab-content visible">
-                        <div class="properties">
-                          <p><span class="fw-600">Материал:</span> Эко пластик</p>
-                          <p><span class="fw-600">Еще инфо:</span> Medela</p>
-                          <p><span class="fw-600">Производитель:</span> Китай</p>
-                        </div>
+                        { /* If any product properties are set */
+                          this.state.product.properties.length > 0 &&
+                          <div class="properties">
+                            { /* Display product properties */
+                              this.state.product.properties.map(({label, value}, key) => (
+                                <p key={key}>
+                                  <span class="fw-600">{label}:</span> <span>{value}</span>
+                                </p>
+                              ))
+                            }
+                          </div>
+                        }
                         <p class="text">
                           { this.state.product.briefly }
                         </p>
@@ -272,7 +280,7 @@ export default class Product extends React.Component {
                         }
                       </div>
                     }
-                    {
+                    { /* If product reviews tab is active */
                       this.state.productTab === 'reviews' &&
                       <div id="tab-votes" class="tab-content visible">
                         <div class="properties">
