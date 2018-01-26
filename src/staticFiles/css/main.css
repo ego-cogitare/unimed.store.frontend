@@ -1049,9 +1049,64 @@ html {
           height: 100%; }
     .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content {
       display: none;
-      line-height: 1.5rem; }
+      line-height: 1.5rem;
+      padding-top: 14px; }
       .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content.visible {
         display: block; }
+      .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .hr {
+        margin: 10px 0; }
+      .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .rating {
+        color: #b6b68d;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-left: 6px; }
+      .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .review .rating {
+        display: inline-block;
+        position: relative;
+        letter-spacing: 0; }
+        .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .review .rating .progress {
+          display: block;
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          overflow: hidden; }
+          .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .review .rating .progress:before {
+            letter-spacing: 0;
+            content: "\2605" "\2605" "\2605" "\2605" "\2605";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%; }
+      .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .heading-2 {
+        padding: 10px 0; }
+      .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row {
+        margin-top: 5px; }
+        .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row .rating {
+          unicode-bidi: bidi-override;
+          direction: rtl;
+          letter-spacing: -2px; }
+          .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row .rating > span {
+            display: inline-block;
+            position: relative;
+            font-size: 1.1rem;
+            color: #b6b68d;
+            font-weight: 700;
+            cursor: pointer; }
+            .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row .rating > span.fix:before,
+            .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row .rating > span.fix ~ span:before, .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row .rating > span:hover:before,
+            .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row .rating > span:hover ~ span:before {
+              content: "\2605";
+              position: absolute;
+              left: 0;
+              color: #b6b68d; }
+        .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row .input {
+          border: 1px solid #dcdcdc;
+          padding-left: 8px;
+          height: 38px; }
+          .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .reviews-list .post-review .form-row .input.textarea {
+            height: 100px;
+            padding: 5px 8px; }
       .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .properties {
         padding: 25px 0; }
       .product-page .product-view .column .general-info .tabs-wrapper .tabs-content .tab-content .btn-youtube {

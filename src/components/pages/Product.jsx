@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Partials from './partials';
 import { buildUrl, currencyIcon, viewHistoryPush, viewHistoryList } from '../../core/helpers/Utils';
 import Settings from '../../core/helpers/Settings';
-import { product } from '../../actions';
+import { product, addProductReview } from '../../actions';
 
 export default class Product extends React.Component {
 
@@ -30,7 +30,12 @@ export default class Product extends React.Component {
         minutes: '00',
         seconds: '00',
       },
-      discountTimeLeft: 0
+      discountTimeLeft: 0,
+      reviewRate: 0,
+      reviewUserName: '',
+      reviewComment: '',
+      reviewError: '',
+      reviewSuccess: ''
     };
   }
 
@@ -142,6 +147,33 @@ export default class Product extends React.Component {
   setProductTab(productTab, e) {
     e.preventDefault();
     this.setState({ productTab });
+  }
+
+  addReview() {
+    this.setState({
+      reviewError: '',
+      reviewSuccess: '',
+    });
+
+    const review = {
+      productId: this.props.params.id,
+      rate: 6 - this.state.reviewRate,
+      userName: this.state.reviewUserName,
+      review: this.state.reviewComment,
+    };
+
+    addProductReview(
+      review,
+      ({message}) => {
+        this.setState({
+          reviewSuccess: message,
+          reviewRate: 0,
+          reviewUserName: '',
+          reviewComment: ''
+        });
+      },
+      (response)  => this.setState({ reviewError: response.responseJSON.error })
+    );
   }
 
   render() {
@@ -270,7 +302,7 @@ export default class Product extends React.Component {
                           </div>
                         }
                         <p class="text">
-                          { this.state.product.briefly }
+                          { this.state.product.briefly || <span>У этого продукта нет описания.</span> }
                         </p>
                         {
                           this.state.product.video &&
@@ -283,8 +315,65 @@ export default class Product extends React.Component {
                     { /* If product reviews tab is active */
                       this.state.productTab === 'reviews' &&
                       <div id="tab-votes" class="tab-content visible">
-                        <div class="properties">
-                          votes
+                        <div class="reviews-list">
+                          {
+                            this.state.product.reviews.map(({id, userName, review, rate, dateCreated}) => (
+                              <div key={id} class="review">
+                                <div>
+                                  <span class="fw-600">Имя:</span> <span>{userName}</span>
+                                </div>
+                                <div class="clear">
+                                  <span class="fw-600 left">Оценка:</span>
+                                  <div class="rating left">☆☆☆☆☆<span class="progress" style={{width:`${rate*20}%`}}></span></div>
+                                </div>
+                                <div>
+                                  <span class="fw-600">Отзыв:</span>
+                                  <span>
+                                    {review}
+                                  </span>
+                                </div>
+                                <div class="hr"></div>
+                              </div>
+                            ))
+                          }
+
+                          <div class="heading-2">Оставить отзыв</div>
+                          <div class="post-review">
+                            <div class="form-row clear">
+                              <span class="fw-600 left">Оценка:</span>
+                              <div class="rating left">
+                                {
+                                  [1,2,3,4,5].map((reviewRate) => (
+                                    <span
+                                      key={reviewRate}
+                                      class={classNames({'fix': reviewRate === this.state.reviewRate})}
+                                      onClick={() => this.setState({ reviewRate })}
+                                    >☆</span>
+                                  ))
+                                }
+                          		</div>
+                              { this.state.reviewSuccess && <div class="color-green right">{this.state.reviewSuccess}</div> }
+                              { this.state.reviewError && <div class="right" style={{color:'#c00'}}>{this.state.reviewError}</div> }
+                            </div>
+                            <div class="form-row">
+                              <input
+                                type="text"
+                                class="input w100p"
+                                placeholder="Ваше имя"
+                                value={this.state.reviewUserName}
+                                onChange={(e) => this.setState({ reviewUserName: e.target.value })}
+                              />
+                            </div>
+                            <div class="form-row">
+                              <textarea
+                                class="input textarea w100p"
+                                placeholder="Ваш отзыв"
+                                value={this.state.reviewComment}
+                                onChange={(e) => this.setState({ reviewComment: e.target.value })}
+                              ></textarea>
+                            </div>
+                            <div class="btn-green" onClick={this.addReview.bind(this)}>отправить отзыв</div>
+                          </div>
                         </div>
                       </div>
                     }

@@ -12,6 +12,10 @@ export function product({ id }, success, error) {
     request(`/store/product/${id}`, {}, 'get', success, error);
 };
 
+export function addProductReview(params, success, error) {
+    request(`/store/product/${params.productId}/add-review`, params, 'post', success, error);
+};
+
 export function blog(params, success, error) {
     request(`/store/blog`, params, 'get', success, error);
 };
