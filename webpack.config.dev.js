@@ -42,10 +42,11 @@ module.exports = {
     extensions: ['.js', ''],
     alias: {
       config: path.resolve(__dirname, './src/config/config.dev'),
+      cart: path.resolve(__dirname, './src/core/helpers/Cart'),
     }
   },
   plugins: [
-    new webpack.ProvidePlugin({ config: 'config' }),
+    new webpack.ProvidePlugin({ config: 'config', cart: 'cart' }),
     new HtmlWebpackPlugin({
       title: 'JUNIMED',
       inject: false,

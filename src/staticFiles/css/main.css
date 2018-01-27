@@ -1228,21 +1228,25 @@ header .header {
       header .header .search-cart .delimiter i {
         font-size: 2.5rem;
         border-right: 1px solid #dcdcdc; }
-    header .header .search-cart .cart i:after {
-      position: absolute;
-      right: -6px;
-      top: -6px;
-      font-family: 'Gotham Pro';
-      content: attr(data-count);
-      display: block;
-      background: #81c244;
-      color: #fff;
-      font-size: 0.8rem;
-      width: 18px;
-      height: 18px;
-      text-align: center;
-      line-height: 20px;
-      border-radius: 50%; }
+    header .header .search-cart .cart a {
+      color: inherit;
+      text-decoration: none;
+      position: relative; }
+      header .header .search-cart .cart a:after {
+        position: absolute;
+        right: -6px;
+        top: -6px;
+        font-family: 'Gotham Pro';
+        content: attr(data-count);
+        display: block;
+        background: #81c244;
+        color: #fff;
+        font-size: 0.8rem;
+        width: 18px;
+        height: 18px;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 50%; }
 
 .posts {
   display: flex;

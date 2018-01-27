@@ -1,10 +1,22 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Link } from 'react-router';
+import { subscribe } from '../../../core/helpers/EventEmitter';
 
 export default class Header extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      cartProductCount: cart.get().totalCount
+    };
+  }
+
+  componentDidMount() {
+    subscribe('cart:updated', (cart) => {
+      this.setState({ cartProductCount: cart.totalCount })
+    });
   }
 
   render() {
@@ -22,7 +34,7 @@ export default class Header extends React.Component {
               <input type="text" id="keyword" class="input"
                 name="keyword"
                 onKeyDown={(e) => {
-                  if (e.which === 13 && e.target.value.length >=3) {
+                  if (e.which === 13 && e.target.value.length >= 3) {
                     location.href = `/category?keyword=${e.target.value}`;
                   }
                 }}
@@ -32,7 +44,7 @@ export default class Header extends React.Component {
               <i></i>
             </li>
             <li class="cart">
-              <i class="fa fa-shopping-basket" data-count="2"></i>
+              <Link class={classNames('fa fa-shopping-basket', {'empty-cart':!this.state.cartProductCount})} data-count={this.state.cartProductCount} to="/checkout"></Link>
             </li>
           </ul>
           <ul class="menu right">

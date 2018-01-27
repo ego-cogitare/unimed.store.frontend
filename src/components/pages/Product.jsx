@@ -2,6 +2,7 @@ import React from 'react';
 import Moment from 'moment';
 import { Link } from 'react-router';
 import classNames from 'classnames';
+import { dispatch } from '../../core/helpers/EventEmitter';
 import Partials from './partials';
 import { buildUrl, currencyIcon, viewHistoryPush, viewHistoryList } from '../../core/helpers/Utils';
 import Settings from '../../core/helpers/Settings';
@@ -176,6 +177,18 @@ export default class Product extends React.Component {
     );
   }
 
+  addToCart(product) {
+    const cartProduct = {
+      brand: product.brand,
+      picture: product.picture,
+      title: product.title,
+      id: product.id,
+      price: product.price,
+      sku: product.sku,
+    };
+    dispatch('cart:product:add', cartProduct);
+  }
+
   render() {
     return (
       <section>
@@ -272,7 +285,7 @@ export default class Product extends React.Component {
                 }
                 </div>
                 <div class="clear buy-btns">
-                  <div class="btn btn-green left">добавить в корзину</div>
+                  <div class="btn btn-green left" onClick={this.addToCart.bind(this, this.state.product)}>добавить в корзину</div>
                   <div class="btn left">купить в один клик</div>
                 </div>
                 <div class="hr"></div>
