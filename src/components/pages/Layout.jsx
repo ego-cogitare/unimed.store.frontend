@@ -1,7 +1,7 @@
 import React from 'react';
 import Settings from '../../core/helpers/Settings';
 import Partials from './partials';
-import { subscribe, dispatch } from '../../core/helpers/EventEmitter';
+import { dispatch } from '../../core/helpers/EventEmitter';
 import { bootstrap } from '../../actions/bootstrap';
 import '../../staticFiles/js/app';
 import '../../staticFiles/css/main.css';
@@ -12,7 +12,8 @@ export default class Layout extends React.Component {
     super(props);
 
     this.state = {
-      menus: {}
+      menus: {},
+      pageLoaded: false
     };
   }
 
@@ -20,9 +21,12 @@ export default class Layout extends React.Component {
   componentDidMount() {
     bootstrap(
       (data) => {
-        dispatch('bootstrap', data);
         Settings.apply(data.settings);
-        this.setState({ menus: data.menus });
+        this.setState({
+          menus: data.menus,
+          pageLoaded: true
+        });
+        dispatch('bootstrap', data);
       },
       (e) => {
         dispatch('notification:throw', {
@@ -35,13 +39,16 @@ export default class Layout extends React.Component {
   }
 
   render() {
-    return (
-       <div>
-         <Partials.HeaderMenu data={{ menu: this.state.menus['5a55ff531d41c878ac6206a2'] }} />
-         <Partials.Header data={{ menu: this.state.menus['5a5600631d41c878aa666c63'] }} />
-         <Partials.Content children={this.props.children} />
-         <Partials.Footer data={{ menu: this.state.menus['5a57435b7f36602a06cdb929'] }} />
-      </div>
-    );
+    if (this.state.pageLoaded) {
+      return (
+        <div>
+          <Partials.HeaderMenu data={{ menu: this.state.menus['5a55ff531d41c878ac6206a2'] }} />
+          <Partials.Header data={{ menu: this.state.menus['5a5600631d41c878aa666c63'] }} />
+          <Partials.Content children={this.props.children} />
+          <Partials.Footer data={{ menu: this.state.menus['5a57435b7f36602a06cdb929'] }} />
+        </div>
+      );
+    }
+    return null;
   }
 }

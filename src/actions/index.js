@@ -27,3 +27,7 @@ export function tags(params, success, error) {
 export function categories(params, success, error) {
     request(`/store/categories`, params, 'get', success, error);
 };
+
+export function checkout(params, success, error) {
+    request(`/store/checkout`, params, 'post', success, error);
+};

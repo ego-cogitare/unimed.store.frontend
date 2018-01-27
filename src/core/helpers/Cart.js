@@ -7,13 +7,13 @@ class Cart {
     // Subscribe to product add
     subscribe('cart:product:add', (product) => {
       this.addProduct(product);
-      console.log('Product added to cart:', product, this.get());
+      //console.log('Product added to cart:', product, this.get());
     });
 
     // Subscribe to product delete
     subscribe('cart:product:remove', (product) => {
       this.removeProduct(product);
-      console.log('Product removed from cart:', product, this.get());
+      // console.log('Product removed from cart:', product, this.get());
     });
 
     // Broadcast cart updated event
@@ -21,14 +21,17 @@ class Cart {
   }
 
   // Get cart object
-  get()
-  {
-    return JSON.parse(localStorage.getItem('cart') || '{"totalCount":0,"totalPrice":0}');
+  get() {
+    const emptyCart = {
+      totalCount: 0,
+      totalPrice: 0,
+      products: []
+    };
+    return JSON.parse(localStorage.getItem('cart') || JSON.stringify(emptyCart));
   }
 
   // Save cart object to local storage
-  update(cart)
-  {
+  update(cart) {
     // Update cart total products count
     localStorage.setItem('cart', JSON.stringify(cart));
 
@@ -37,8 +40,7 @@ class Cart {
   }
 
   // Add product to cart
-  addProduct(product)
-  {
+  addProduct(product) {
     const cart = this.get();
 
     // If first product add
@@ -70,8 +72,7 @@ class Cart {
   }
 
   // Remove product from cart
-  removeProduct(product, removeCount = 1)
-  {
+  removeProduct(product, removeCount = 1) {
     const cart = this.get();
 
     // Search for product in cart
@@ -106,13 +107,11 @@ class Cart {
     return cart;
   }
 
-  getProduct(productId)
-  {
+  getProduct(productId) {
     return this.getProducts().find(({id}) => id === productId) || null;
   }
 
-  getProducts()
-  {
+  getProducts() {
     return this.get().products || [];
   }
 
