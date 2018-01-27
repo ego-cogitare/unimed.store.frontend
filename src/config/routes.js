@@ -31,6 +31,10 @@ const routes = {
       path: 'checkout',
       component: require('../components/pages/Checkout.jsx').default
     },
+    {
+      path: 'thanks',
+      component: require('../components/pages/Thanks.jsx').default
+    },
   ],
   // Custom route component handler depending of the user type
   custom: {

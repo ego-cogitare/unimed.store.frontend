@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Link } from 'react-router';
 import Partials from './partials';
 import Settings from '../../core/helpers/Settings';
@@ -23,6 +24,7 @@ export default class Checkout extends React.Component {
       phone: '',
       address: '',
       comments: '',
+      errors: []
     };
 
     this.bootstrap = this.bootstrapListener.bind(this);
@@ -85,10 +87,20 @@ export default class Checkout extends React.Component {
       address: this.state.address,
       comments: this.state.comments,
     };
+    this.setState({ errors: [] });
     checkout(
       data,
-      (r) => console.log(r),
-      (e) => console.error(e)
+      (r) => {
+        // Flush cart
+        cart.reset();
+
+        // Redirect to thanks page
+        location.href = '/thanks';
+      },
+      (e) => {
+        this.state.errors[e.responseJSON.field] = e.responseJSON.error;
+        this.setState({ errors: this.state.errors });
+      }
     );
   }
 
@@ -166,16 +178,28 @@ export default class Checkout extends React.Component {
                       <div class="heading-1">покупатель</div>
                       <form class="customer-form" action="" method="post">
                         <label class="clear"><span>ФИО:</span>
-                        <input type="text" class="input" value={this.state.userName} onChange={(e)=>this.setState({userName:e.target.value})} placeholder="Иван Иванов" />
+                        <span class="no-padding">
+                          <input type="text" class="input" value={this.state.userName} onChange={(e)=>this.setState({userName:e.target.value})} placeholder="Иван Иванов" />
+                          <small class="color-red no-wrap">{this.state.errors['userName']}</small>
+                        </span>
                       </label>
                       <label class="clear"><span>E-mail:</span>
-                        <input type="email" class="input" value={this.state.email} onChange={(e)=>this.setState({email:e.target.value})} placeholder="example@gmail.com" />
+                        <span class="no-padding">
+                          <input type="email" class="input" value={this.state.email} onChange={(e)=>this.setState({email:e.target.value})} placeholder="example@gmail.com" />
+                          <small class="color-red no-wrap">{this.state.errors['email']}</small>
+                        </span>
                       </label>
                       <label class="clear"><span>Телефон:</span>
-                        <input type="text" class="input" value={this.state.phone} onChange={(e)=>this.setState({phone:e.target.value})} placeholder="063 523 65 65" />
+                        <span class="no-padding">
+                          <input type="text" class="input" value={this.state.phone} onChange={(e)=>this.setState({phone:e.target.value})} placeholder="063 523 65 65" />
+                          <small class="color-red no-wrap">{this.state.errors['phone']}</small>
+                        </span>
                       </label>
                       <label class="clear"><span>Адрес:</span>
-                        <input type="text" class="input" value={this.state.address} onChange={(e)=>this.setState({address:e.target.value})} placeholder="Одесса, ул. Раскидайловская 11" />
+                        <span class="no-padding">
+                          <input type="text" class="input" value={this.state.address} onChange={(e)=>this.setState({address:e.target.value})} placeholder="Одесса, ул. Раскидайловская 11" />
+                          <small class="color-red no-wrap">{this.state.errors['address']}</small>
+                        </span>
                       </label>
                       <label class="clear"><span>Коментарий:</span>
                       <textarea type="text" class="input textarea" value={this.state.comments} onChange={(e)=>this.setState({comments:e.target.value})} placeholder="прошу доставить в первой половине дня, набрать у ворот"></textarea>
@@ -183,7 +207,7 @@ export default class Checkout extends React.Component {
                   </form>
                 </div>
                 <div class="delivery-payment-info">
-                  <div class="delivery">
+                  <div class={classNames('delivery', {'color-red': this.state.errors['deliveryId']})}>
                     <div class="heading-1">способ доставки</div>
                     {
                       this.state.delivery.map(({id, title}) => (
@@ -196,7 +220,7 @@ export default class Checkout extends React.Component {
                       ))
                     }
                   </div>
-                  <div class="payment">
+                  <div class={classNames('payment', {'color-red': this.state.errors['paymentId']})}>
                     <div class="heading-1">способ оплаты</div>
                     {
                       this.state.payment.map(({id, title}) => (

@@ -3,7 +3,6 @@ import Settings from '../../core/helpers/Settings';
 import Partials from './partials';
 import { dispatch } from '../../core/helpers/EventEmitter';
 import { bootstrap } from '../../actions/bootstrap';
-import '../../staticFiles/js/app';
 import '../../staticFiles/css/main.css';
 
 export default class Layout extends React.Component {
@@ -23,9 +22,12 @@ export default class Layout extends React.Component {
       (data) => {
         Settings.apply(data.settings);
         this.setState({
-          menus: data.menus,
-          pageLoaded: true
-        });
+            menus: data.menus,
+            pageLoaded: true
+          },
+          // Initialize JS scripts after page is rendered
+          () => require('../../staticFiles/js/app')
+        );
         dispatch('bootstrap', data);
       },
       (e) => {
