@@ -18,6 +18,11 @@ export default class Checkout extends React.Component {
       payment: Settings.get('payment'),
       paymentId: null,
       deliveryId: null,
+      userName: '',
+      email: '',
+      phone: '',
+      address: '',
+      comments: '',
     };
 
     this.bootstrap = this.bootstrapListener.bind(this);
@@ -73,7 +78,12 @@ export default class Checkout extends React.Component {
     const data = {
       paymentId: this.state.paymentId,
       deliveryId: this.state.deliveryId,
-      order: this.state.cart.products.map(({id,count}) => ({id,count}))
+      order: this.state.cart.products.map(({id,count}) => ({id,count})),
+      userName: this.state.userName,
+      email: this.state.email,
+      phone: this.state.phone,
+      address: this.state.address,
+      comments: this.state.comments,
     };
     checkout(
       data,
@@ -156,19 +166,19 @@ export default class Checkout extends React.Component {
                       <div class="heading-1">покупатель</div>
                       <form class="customer-form" action="" method="post">
                         <label class="clear"><span>ФИО:</span>
-                        <input type="text" class="input" value="" placeholder="Иван Иванов" />
+                        <input type="text" class="input" value={this.state.userName} onChange={(e)=>this.setState({userName:e.target.value})} placeholder="Иван Иванов" />
                       </label>
                       <label class="clear"><span>E-mail:</span>
-                        <input type="email" class="input" value="" placeholder="example@gmail.com" />
+                        <input type="email" class="input" value={this.state.email} onChange={(e)=>this.setState({email:e.target.value})} placeholder="example@gmail.com" />
                       </label>
                       <label class="clear"><span>Телефон:</span>
-                        <input type="text" class="input" value="" placeholder="063 523 65 65" />
+                        <input type="text" class="input" value={this.state.phone} onChange={(e)=>this.setState({phone:e.target.value})} placeholder="063 523 65 65" />
                       </label>
                       <label class="clear"><span>Адрес:</span>
-                        <input type="text" class="input" value="" placeholder="Одесса, ул. Раскидайловская 11" />
+                        <input type="text" class="input" value={this.state.address} onChange={(e)=>this.setState({address:e.target.value})} placeholder="Одесса, ул. Раскидайловская 11" />
                       </label>
                       <label class="clear"><span>Коментарий:</span>
-                      <textarea type="text" class="input textarea" value="" placeholder="прошу доставить в первой половине дня, набрать у ворот"></textarea>
+                      <textarea type="text" class="input textarea" value={this.state.comments} onChange={(e)=>this.setState({comments:e.target.value})} placeholder="прошу доставить в первой половине дня, набрать у ворот"></textarea>
                     </label>
                   </form>
                 </div>
