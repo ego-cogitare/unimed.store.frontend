@@ -9,13 +9,13 @@ export default class Header extends React.Component {
     super(props);
 
     this.state = {
-      cartProductCount: cart.get().totalCount
+      cart: cart.get()
     };
   }
 
   componentDidMount() {
     subscribe('cart:updated', (cart) => {
-      this.setState({ cartProductCount: cart.totalCount })
+      this.setState({ cart })
     });
   }
 
@@ -44,7 +44,7 @@ export default class Header extends React.Component {
               <i></i>
             </li>
             <li class="cart">
-              <Link class={classNames('fa fa-shopping-basket', {'empty-cart':!this.state.cartProductCount})} data-count={this.state.cartProductCount} to="/checkout"></Link>
+              <Link class={classNames('fa fa-shopping-basket', {'empty-cart':!this.state.cartProductCount})} data-count={this.state.cart.totalCount} to="/checkout"></Link>
             </li>
           </ul>
           <ul class="menu right">

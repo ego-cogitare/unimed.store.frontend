@@ -58,28 +58,33 @@ class Cart {
   }
 
   // Remove product from cart
-  removeProduct(product)
+  removeProduct(product, removeCount = 1)
   {
     const cart = this.get();
 
     // Search for product in cart
-    const cartProduct = this.getProduct(product.id);
+    const cartProduct = cart.products.find(({id}) => id === product.id);
 
     if (!cartProduct) {
       return cart;
     }
 
-    // Remove product records from cart
-    if (cartProduct.count === 1) {
+    // Real removed products count
+    let removedCount = 0;
+
+    // If all products removing (-1) or last product removed
+    if (removeCount === -1 || cartProduct.count <= removeCount) {
+      removedCount = cartProduct.count;
       cart.products = cart.products.filter(({id}) => id !== product.id);
     }
     else {
+      removedCount = 1;
       cartProduct.count--;
     }
 
     // Decrease product count
-    cart.totalCount--;
-
+    cart.totalCount -= removedCount;
+    
     // Save cart
     this.update(cart);
 
