@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import classNames from 'classnames';
 import { dispatch } from '../../core/helpers/EventEmitter';
 import Partials from './partials';
-import { buildUrl, currencyIcon, viewHistoryPush, viewHistoryList } from '../../core/helpers/Utils';
+import { buildUrl, currencyIcon, viewHistoryPush, viewHistoryList, calcProductRealPrice } from '../../core/helpers/Utils';
 import Settings from '../../core/helpers/Settings';
 import { product, addProductReview } from '../../actions';
 
@@ -128,18 +128,6 @@ export default class Product extends React.Component {
     this.fetchProduct(props);
   }
 
-  calcDiscountPrice() {
-    let price = this.state.product.price;
-
-    if (this.state.product.discountType === 'const') {
-      price = this.state.product.price - this.state.product.discount;
-    }
-    if (this.state.product.discountType === '%') {
-      price = this.state.product.price * (1 - 0.01 * this.state.product.discount);
-    }
-    return price.toFixed(2);
-  }
-
   setProductPicture(picture) {
     this.state.product.picture = picture;
     this.setState({ product: this.state.product });
@@ -185,6 +173,8 @@ export default class Product extends React.Component {
       id: product.id,
       price: product.price,
       sku: product.sku,
+      discount: product.discount,
+      discountType: product.discountType,
     };
     dispatch('cart:product:add', cartProduct);
   }
@@ -243,7 +233,7 @@ export default class Product extends React.Component {
                   this.state.product.discountType ?
                   <div>
                     <div class="price left">
-                      <span>{this.state.currencyCode} {this.calcDiscountPrice()}</span>
+                      <span>{this.state.currencyCode} {calcProductRealPrice(this.state.product).toFixed(2)}</span>
                       <span class="old">{this.state.currencyCode} {this.state.product.price.toFixed(2)}</span>
                     </div>
                     { /* If some discount time not end */

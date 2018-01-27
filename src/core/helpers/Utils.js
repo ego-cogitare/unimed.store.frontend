@@ -41,3 +41,18 @@ export function viewHistoryPush(product) {
 export function viewHistoryList(limit = 5) {
   return JSON.parse(localStorage.getItem('viewHistory') || '[]').slice(-1 * limit);
 };
+
+/**
+ * Calculate real product price depends on discount
+ */
+ export function calcProductRealPrice(product) {
+   let price = product.price;
+
+   if (product.discountType === 'const') {
+     price = product.price - product.discount;
+   }
+   if (product.discountType === '%') {
+     price = product.price * (1 - 0.01 * product.discount);
+   }
+   return price;
+ };

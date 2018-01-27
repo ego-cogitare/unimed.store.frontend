@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import Partials from './partials';
 import Settings from '../../core/helpers/Settings';
 import { subscribe } from '../../core/helpers/EventEmitter';
-import { buildUrl, currencyIcon } from '../../core/helpers/Utils';
+import { buildUrl, currencyIcon, calcProductRealPrice } from '../../core/helpers/Utils';
 
 export default class Cart extends React.Component {
 
@@ -84,10 +84,10 @@ export default class Cart extends React.Component {
                           </div>
                         </div>
                         <div class="price">
-                          {this.state.currencyCode} {product.price.toFixed(2)}
+                          {this.state.currencyCode} {calcProductRealPrice(product).toFixed(2)}
                         </div>
                         <div class="total fw-600">
-                          {this.state.currencyCode} {(product.price * product.count).toFixed(2)}
+                          {this.state.currencyCode} {(calcProductRealPrice(product) * product.count).toFixed(2)}
                         </div>
                         <div class="product-remove right" onClick={this.productRemove.bind(this, product)}>
                           <i class="fa fa-times-circle"></i>
@@ -98,9 +98,10 @@ export default class Cart extends React.Component {
                   }
                   </div>
                   <div class="cart-summary">
-                    <strong>Сумма:</strong> <span>$75.00</span>
+                    <strong>Сумма:</strong> <span>{this.state.currencyCode} {this.state.cart.totalPrice.toFixed(2)}</span>
                   </div>
                   <div class="hr"></div>
+                  {/*
                   <div class="cart-summary">
                     <strong>Промокод:</strong> <span><input type="text" class="input" value="" /></span>
                   </div>
@@ -109,6 +110,7 @@ export default class Cart extends React.Component {
                     <strong>Итого:</strong> <span>$75.00</span>
                   </div>
                   <div class="hr"></div>
+                  */}
                   <div class="order-wrapper clear">
                     <div class="customer-info">
                       <div class="heading-1">покупатель</div>

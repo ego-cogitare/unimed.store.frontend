@@ -1,4 +1,5 @@
 import { subscribe, dispatch } from './EventEmitter';
+import { calcProductRealPrice } from './Utils';
 
 class Cart {
 
@@ -22,7 +23,7 @@ class Cart {
   // Get cart object
   get()
   {
-    return JSON.parse(localStorage.getItem('cart') || '{"totalCount":0}');
+    return JSON.parse(localStorage.getItem('cart') || '{"totalCount":0,"totalPrice":0}');
   }
 
   // Save cart object to local storage
@@ -51,10 +52,21 @@ class Cart {
     // Increase product count
     cart.totalCount++;
 
+    // Recalculate cart's products total price
+    cart.totalPrice = this.productsTotalPrice(cart.products);
+
     // Save cart
     this.update(cart);
 
     return cart;
+  }
+
+  // Calculate products total price
+  productsTotalPrice(products) {
+    let totalPrice = 0;
+    products.forEach((product) => totalPrice += product.count * calcProductRealPrice(product));
+
+    return totalPrice;
   }
 
   // Remove product from cart
@@ -84,7 +96,10 @@ class Cart {
 
     // Decrease product count
     cart.totalCount -= removedCount;
-    
+
+    // Recalculate cart's products total price
+    cart.totalPrice = this.productsTotalPrice(cart.products);
+
     // Save cart
     this.update(cart);
 
