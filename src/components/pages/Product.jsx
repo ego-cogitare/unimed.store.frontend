@@ -322,6 +322,9 @@ export default class Product extends React.Component {
                                 <div>
                                   <span class="fw-600">Имя:</span> <span>{userName}</span>
                                 </div>
+                                <div>
+                                  <span class="fw-600">Дата:</span> <span>{Moment(dateCreated * 1000).format('DD.MM.YYYY HH:mm')}</span>
+                                </div>
                                 <div class="clear">
                                   <span class="fw-600 left">Оценка:</span>
                                   <div class="rating left">☆☆☆☆☆<span class="progress" style={{width:`${rate*20}%`}}></span></div>
