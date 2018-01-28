@@ -17,8 +17,8 @@ export default class Category extends React.Component {
       products: [],
       curPage: 1,
       perPage: {
-        options: [1, 2, 5],
-        current: 5
+        options: [3, 5, 10],
+        current: 10
       },
       sort: {
         field: 'dateCreated',

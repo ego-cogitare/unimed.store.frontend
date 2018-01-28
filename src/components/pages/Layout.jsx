@@ -18,6 +18,15 @@ export default class Layout extends React.Component {
 
   // Get bootstrap settings
   componentDidMount() {
+    this.getBootstrapData();
+  }
+
+  componentWillReceiveProps(props) {
+    this.getBootstrapData();
+    $(window).scrollTop(0);
+  }
+
+  getBootstrapData() {
     bootstrap(
       (data) => {
         Settings.apply(data.settings);
@@ -25,8 +34,7 @@ export default class Layout extends React.Component {
             menus: data.menus,
             pageLoaded: true
           },
-          // Initialize JS scripts after page is rendered
-          () => require('../../staticFiles/js/app')
+          () => $(window).scrollTop(0)
         );
         dispatch('bootstrap', data);
       },

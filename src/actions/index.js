@@ -20,8 +20,16 @@ export function blog(params, success, error) {
     request(`/store/blog`, params, 'get', success, error);
 };
 
+export function page({id}, success, error) {
+    request(`/store/page/${id}`, {}, 'get', success, error);
+};
+
 export function tags(params, success, error) {
     request(`/store/tags`, params, 'get', success, error);
+};
+
+export function category({id}, success, error) {
+    request(`/store/category/${id}`, {}, 'get', success, error);
 };
 
 export function categories(params, success, error) {

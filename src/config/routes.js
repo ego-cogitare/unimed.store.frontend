@@ -12,6 +12,10 @@ const routes = {
       component: require('../components/pages/Contacts.jsx').default
     },
     {
+      path: 'about-us(/:id)',
+      component: require('../components/pages/AboutUs.jsx').default
+    },
+    {
       path: 'blog',
       component: require('../components/pages/Blog.jsx').default
     },
@@ -19,10 +23,10 @@ const routes = {
       path: 'category(/:id)',
       component: require('../components/pages/Category.jsx').default
     },
-    // {
-    //   path: 'category/:id',
-    //   component: require('../components/pages/SeparateCategory.jsx').default
-    // },
+    {
+      path: 'catalog/:id',
+      component: require('../components/pages/SeparateCategory.jsx').default
+    },
     {
       path: 'product/:id',
       component: require('../components/pages/Product.jsx').default

@@ -1,8 +1,11 @@
 import React from 'react';
 import Moment from 'moment';
+import classNames from 'classnames';
 import { Link } from 'react-router';
 import Partials from './partials';
 import { buildUrl } from '../../core/helpers/Utils';
+import { subscribe, unsubscribe } from '../../core/helpers/EventEmitter';
+import { page } from '../../actions';
 
 export default class AboutUs extends React.Component {
 
@@ -10,11 +13,47 @@ export default class AboutUs extends React.Component {
     super(props);
 
     this.state = {
+      menu: [],
+      content: ''
     };
+
+    this.bootstrap = this.bootstrapListener.bind(this);
+  }
+
+  componentWillMount() {
+    subscribe('bootstrap', this.bootstrap);
+  }
+
+  componentWillUnmount() {
+    unsubscribe('bootstrap', this.bootstrap);
+  }
+
+  loadPage(pageId) {
+    page(
+      { id: pageId },
+      ({body}) => this.setState({ content: body }),
+      (e) => console.error(e)
+    );
   }
 
   componentDidMount() {
+    // If page id is provided - load page contents
+    this.props.params.id && this.loadPage(this.props.params.id);
+  }
 
+  componentWillReceiveProps(props) {
+    // If page id set
+    props.params.id && this.loadPage(props.params.id);
+  }
+
+  // On meno is loaded
+  bootstrapListener({ menus }) {
+    this.setState({
+        menu: menus['5a6da24fc7125460ffb53faa']
+      },
+      // If display page id not set - show first page from menu
+      () => !this.props.params.id && this.loadPage(this.state.menu.children[0].link.split('/').pop())
+    );
   }
 
   render() {
@@ -25,23 +64,17 @@ export default class AboutUs extends React.Component {
         <div class="wrapper catalog clear">
           <div class="sitebar">
             <ul class="menu">
-              <li class="item">
-                <a href="#" class="heading-3 fw-600">почему мы?</a>
-              </li>
-              <li class="item">
-                <a href="#" class="heading-3 fw-600">текст</a>
-              </li>
-              <li class="item">
-                <a href="#" class="heading-3 fw-600">и еще пункт</a>
-              </li>
+              {
+                ((this.state.menu || []).children || []).map(({ id, link, title }, key)=>(
+                  <li key={id} class="item">
+                    <Link to={link} className={classNames('heading-3 fw-600', { 'active': !this.props.params.id && !key })} activeClassName="active">{title}</Link>
+                  </li>
+                ))
+              }
             </ul>
           </div>
           <div class="content">
-            <div class="text-block">
-              <p class="text">
-                Я совсем один и блаженствую в здешнем краю, словно созданном для таких, как я. Я так счастлив, мой друг, так упоен ощущением покоя, что искусство мое страдает от этого. Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч проскальзывает в его святая святых, а я лежу в высокой траве у быстрого ручья и, прильнув к земле, вижу тысячи всевозможных былинок и чувствую, как близок моему сердцу крошечный мирок, что снует между стебельками, наблюдаю эти неисчислимые, непостижимые разновидности червяков и мошек и чувствую близость всемогущего, создавшего нас по своему подобию, веяние вселюбящего, судившего нам парить в вечном блаженстве, когда взор мой туманится и все вокруг меня и небо надо мной запечатлены в моей душе, точно образ возлюбленной, - тогда, дорогой друг, меня часто томит мысль: "Ах! Как бы выразить, как бы вдохнуть в рисунок то, что так полно, так трепетно живет во мне, запечатлеть отражение моей души, как душа моя - отражение предвечного бога!"
-              </p>
-            </div>
+            <div class="text-block" dangerouslySetInnerHTML={{__html: this.state.content}} />
           </div>
         </div>
 

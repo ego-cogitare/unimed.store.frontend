@@ -31,9 +31,14 @@ export default class Checkout extends React.Component {
     this.cartUpdate = this.cartUpdateListener.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     subscribe('bootstrap', this.bootstrap);
     subscribe('cart:updated', this.cartUpdate);
+  }
+
+  componentWillUnmount() {
+    unsubscribe('bootstrap', this.bootstrap);
+    unsubscribe('cart:updated', this.cartUpdate);
   }
 
   bootstrapListener({ settings: {delivery, payment }}) {
@@ -42,11 +47,6 @@ export default class Checkout extends React.Component {
 
   cartUpdateListener(cart) {
     this.setState({ cart });
-  }
-
-  componentWillUnmount() {
-    unsubscribe('bootstrap', this.bootstrap);
-    unsubscribe('cart:updated', this.cartUpdate);
   }
 
   productRemove(product, e) {

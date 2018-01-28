@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router';
-import { subscribe } from '../../../core/helpers/EventEmitter';
+import { subscribe, unsubscribe } from '../../../core/helpers/EventEmitter';
 
 export default class Header extends React.Component {
 
@@ -11,12 +11,27 @@ export default class Header extends React.Component {
     this.state = {
       cart: cart.get()
     };
+
+    this.cartUpdate = this.cartUpdateListener.bind(this);
+  }
+
+  componentWillMount() {
+    subscribe('cart:updated', this.cartUpdate);
   }
 
   componentDidMount() {
-    subscribe('cart:updated', (cart) => {
-      this.setState({ cart })
+    $(this.refs['search']).on('click', function(e) {
+      e.preventDefault();
+      $(this).next().focus().closest('.search').toggleClass('expanded');
     });
+  }
+
+  componentWillUnmount() {
+    unsubscribe('cart:updated', this.cartUpdate);
+  }
+
+  cartUpdateListener(cart) {
+    this.setState({ cart })
   }
 
   render() {
@@ -30,8 +45,11 @@ export default class Header extends React.Component {
           </div>
           <ul class="search-cart right">
             <li class="search">
-              <i class="fa fa-search"></i>
-              <input type="text" id="keyword" class="input"
+              <i class="fa fa-search" ref="search"></i>
+              <input
+                type="text"
+                id="keyword"
+                class="input"
                 name="keyword"
                 onKeyDown={(e) => {
                   if (e.which === 13 && e.target.value.length >= 3) {

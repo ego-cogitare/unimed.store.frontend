@@ -6,6 +6,7 @@ import PageTitle from './PageTitle.jsx';
 import BlockTitle from './BlockTitle.jsx';
 import Content from './Content.jsx';
 import ProductsList from './ProductsList.jsx';
+import HomeSlider from './HomeSlider.jsx';
 
 export default {
   HeaderMenu,
@@ -16,4 +17,5 @@ export default {
   BlockTitle,
   ProductsList,
   Content,
+  HomeSlider,
 };

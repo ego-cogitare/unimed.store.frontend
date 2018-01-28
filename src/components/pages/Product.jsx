@@ -26,6 +26,7 @@ export default class Product extends React.Component {
       currencyCode: currencyIcon(Settings.get('currencyCode')),
       historyList: [],
       productTab: 'description',
+      cartAddProgress: false,
       discountTimeout: {
         hours: '00',
         minutes: '00',
@@ -36,7 +37,7 @@ export default class Product extends React.Component {
       reviewUserName: '',
       reviewComment: '',
       reviewError: '',
-      reviewSuccess: ''
+      reviewSuccess: '',
     };
   }
 
@@ -166,6 +167,9 @@ export default class Product extends React.Component {
   }
 
   addToCart(product) {
+    if (this.state.cartAddProgress) {
+      return false;
+    }
     const cartProduct = {
       brand: product.brand,
       picture: product.picture,
@@ -175,8 +179,14 @@ export default class Product extends React.Component {
       sku: product.sku,
       discount: product.discount,
       discountType: product.discountType,
+      cartAddProgress: true
     };
     dispatch('cart:product:add', cartProduct);
+
+    // Freeze product add on 1 sec
+    this.setState({ cartAddProgress: true })
+    setTimeout(() => this.setState({ cartAddProgress: false }), 1500);
+    //#6c941a
   }
 
   render() {
@@ -275,7 +285,12 @@ export default class Product extends React.Component {
                 }
                 </div>
                 <div class="clear buy-btns">
-                  <div class="btn btn-green left" onClick={this.addToCart.bind(this, this.state.product)}>добавить в корзину</div>
+                  <div
+                    class={classNames('btn btn-green left', {'cart-add-progress':this.state.cartAddProgress})}
+                    onClick={this.addToCart.bind(this, this.state.product)}
+                  >
+                    {this.state.cartAddProgress ? <span>добавление...</span> : <span>добавить в корзину</span>}
+                  </div>
                   <div class="btn left">купить в один клик</div>
                 </div>
                 <div class="hr"></div>
@@ -386,6 +401,7 @@ export default class Product extends React.Component {
                   </div>
                 </div>
               </div>
+              {/*
               <div class="awards left">
                 <div class="award">
                   <img src="img/products/awards/award-2015.png" alt="Award 2015" />
@@ -397,6 +413,7 @@ export default class Product extends React.Component {
                   <img src="img/products/awards/award-2015.png" alt="Award 2015" />
                 </div>
               </div>
+              */}
             </div>
           </div>
           {/* Related products */
