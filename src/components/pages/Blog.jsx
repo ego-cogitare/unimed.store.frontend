@@ -1,6 +1,7 @@
 import React from 'react';
 import Moment from 'moment';
 import { Link } from 'react-router';
+import queryString from 'query-string';
 import Partials from './partials';
 import { blog, tags } from '../../actions';
 import { buildUrl } from '../../core/helpers/Utils';
@@ -33,19 +34,19 @@ export default class Blog extends React.Component {
   }
 
   fetchPosts() {
-    blog(
-      { orderBy: 'dateCreated', ascdesc: -1 },
-      (posts) => this.setState({ posts }),
-      (error)  => console.error(error)
-    );
-  }
+    // Get filter parameter from query string
+    const { tag } = queryString.parse(location.search);
 
-  filterByTag(tagId, e) {
-    e.preventDefault();
+    // If tag parameter provied
+    const filter = typeof tag !== 'undefined'
+      ? JSON.stringify({ tags: {'$in': [tag] } }) : '';
 
-    // Get list of posts
+    const params = (filter)
+      ? { filter, orderBy: 'dateCreated', ascdesc: -1 }
+      : { orderBy: 'dateCreated', ascdesc: -1 };
+
     blog(
-      { filter: `{"tags":{"$in":["${tagId}"]}}`, orderBy: 'dateCreated', ascdesc: -1 },
+      params,
       (posts) => this.setState({ posts }),
       (error)  => console.error(error)
     );
@@ -61,21 +62,21 @@ export default class Blog extends React.Component {
             <div class="posts">
               {
                 this.state.posts.length > 0 ?
-                  this.state.posts.map(({ id, title, tags, pictures, pictureId, dateCreated }) => (
+                  this.state.posts.map(({ id, title, tags, picture, dateCreated }) => (
                     <div key={id} class="post">
                       <div class="post-wrapper">
                         <div class="picture">
                           <Link to={`/post/${id}`}>
-                            { pictures.length > 0 && <img src={buildUrl(pictures.find(({id}) => id === pictureId) || pictures[0])} alt={title} /> }
+                            <img src={buildUrl(picture)} alt={title} />
                           </Link>
                         </div>
                         <span class="tag fw-600">
                           {
                             (tags || []).map(({ id, title }, key) => (
-                              <a href="#" key={id} onClick={this.filterByTag.bind(this, id)}>
+                              <Link key={id} to={{ pathname: `/blog`, query: { tag: id } }}>
                                 #{title}
                                 { (key < tags.length - 1) && <span>, </span> }
-                              </a>
+                              </Link>
                             ))
                           }
                         </span>
@@ -99,9 +100,9 @@ export default class Blog extends React.Component {
             {
               (this.state.tags || []).map(({ id, title }, key) => (
                 <li key={id} class="tag">
-                  <a href="#" onClick={this.filterByTag.bind(this, id)}>
+                  <Link to={{ pathname: `/blog`, query: { tag: id } }}>
                     &nbsp;#{title}
-                  </a>
+                  </Link>
                   { (key < this.state.tags.length - 1) && <span>,</span> }
                 </li>
               ))

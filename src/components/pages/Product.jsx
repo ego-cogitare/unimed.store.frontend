@@ -227,7 +227,7 @@ export default class Product extends React.Component {
                 this.state.historyList.length > 0 &&
                 <div class="history">
                   <Partials.BlockTitle title="вы уже смотрели" className="text-left no-margin" />
-                  <Partials.ProductsList products={this.state.historyList.slice(0, 2)} />
+                  <Partials.ProductsList products={this.state.historyList.slice(0, 2)} className="no-hover-border no-hover-btn" />
                 </div>
               }
             </div>

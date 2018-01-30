@@ -20,6 +20,10 @@ const routes = {
       component: require('../components/pages/Blog.jsx').default
     },
     {
+      path: 'post/:id',
+      component: require('../components/pages/Post.jsx').default
+    },
+    {
       path: 'category(/:id)',
       component: require('../components/pages/Category.jsx').default
     },

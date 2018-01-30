@@ -186,11 +186,11 @@ export default class Home extends React.Component {
         <div class="wrapper">
           <div class="blog-preview">
           {
-            this.state.posts.map(({ id, title, briefly, pictures, pictureId }) => (
+            this.state.posts.map(({ id, title, briefly, picture, pictureId }) => (
               <div key={id} class="post">
                 <div class="picture">
                   <Link to={`/post/${id}`}>
-                    { pictures.length > 0 && <img src={buildUrl(pictures.find(({id}) => id === pictureId) || pictures[0])} alt={title} /> }
+                    <img src={buildUrl(picture)} alt={title} />
                   </Link>
                 </div>
                 <div class="title">

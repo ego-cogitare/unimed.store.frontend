@@ -45,14 +45,28 @@ export function viewHistoryList(limit = 5) {
 /**
  * Calculate real product price depends on discount
  */
- export function calcProductRealPrice(product) {
-   let price = product.price;
+export function calcProductRealPrice(product) {
+ let price = product.price;
 
-   if (product.discountType === 'const') {
-     price = product.price - product.discount;
-   }
-   if (product.discountType === '%') {
-     price = product.price * (1 - 0.01 * product.discount);
-   }
-   return price;
- };
+ if (product.discountType === 'const') {
+   price = product.price - product.discount;
+ }
+ if (product.discountType === '%') {
+   price = product.price * (1 - 0.01 * product.discount);
+ }
+ return price;
+};
+
+/**
+ * Get random integer
+ */
+export function getRandomInt(min, max) {
+ return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+/**
+ * Get random integer
+ */
+export function getRandomOrder() {
+ return Math.random() > 0.5 ? 1 : -1;
+};
