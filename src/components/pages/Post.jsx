@@ -2,7 +2,7 @@ import React from 'react';
 import Moment from 'moment';
 import { Link } from 'react-router';
 import Partials from './partials';
-import { blog, post, products, tags } from '../../actions';
+import { blog, post, products, tags, addPostComment } from '../../actions';
 import { buildUrl, getRandomOrder } from '../../core/helpers/Utils';
 
 export default class Post extends React.Component {
@@ -10,8 +10,19 @@ export default class Post extends React.Component {
   constructor(props) {
     super(props);
 
+    this.emptyComment = {
+        userName: '',
+        message: '',
+        errorField: '',
+        errorMessage: '',
+        successMessage: ''
+    };
+
     this.state = {
-      post: {},
+      post: {
+        comments: []
+      },
+      comment: { ...this.emptyComment },
       relatedPosts: [], // Related by tag
       tags: [],
       bestsellers: [],
@@ -19,7 +30,7 @@ export default class Post extends React.Component {
     }
   }
 
-  componentDidMount() {
+  fetchPost() {
     post(
       { id: this.props.params.id },
       (post) => {
@@ -46,6 +57,10 @@ export default class Post extends React.Component {
       },
       (error)  => console.error(error)
     );
+  }
+
+  componentDidMount() {
+    this.fetchPost();
 
     // Get list of bestseller products
     products(
@@ -62,6 +77,31 @@ export default class Post extends React.Component {
       {},
       (tags) => this.setState({ tags }),
       (error)  => console.error(error)
+    );
+  }
+
+  addComment(e) {
+    e.preventDefault();
+
+    addPostComment(
+      Object.assign({ ...this.state.comment }, { postId: this.props.params.id }),
+      (response) => this.setState({
+          comment: { ...this.emptyComment, successMessage: response.message },
+          post: Object.assign(this.state.post, {
+            comments: this.state.post.comments.concat([response.comment])
+          })
+        },
+        () => setTimeout(() => this.setState({
+                comment: Object.assign(this.state.comment, { successMessage: '' })
+              }), 2000)
+      ),
+      ({responseJSON}) => this.setState({
+        comment: Object.assign(
+          this.state.comment, {
+            errorField: responseJSON.field,
+            errorMessage: responseJSON.error
+        })
+      })
     );
   }
 
@@ -100,15 +140,21 @@ export default class Post extends React.Component {
                   <div class="text-block" dangerouslySetInnerHTML={{ __html: this.state.post.body }} />
                 </div>
 
-                <div class="section-header text-left no-margin">
-                  <div class="title-wrapper">
-                    <div class="heading-1">обзор на youtube:</div>
+                {
+                  this.state.post.video &&
+                  <div class="section-header text-left no-margin">
+                    <div class="title-wrapper">
+                      <div class="heading-1">обзор на youtube:</div>
+                    </div>
+                    <div class="description"></div>
                   </div>
-                  <div class="description"></div>
-                </div>
-                <div class="youtube-overview">
-                  <iframe src="https://www.youtube.com/embed/-Q40CM9xQSU" frameBorder="0" allowFullScreen=""></iframe>
-                </div>
+                }
+                {
+                  this.state.post.video &&
+                  <div class="youtube-overview">
+                    <iframe src={`https://www.youtube.com/embed/${new URL(this.state.post.video).searchParams.get('v')}`} frameBorder="0" allowFullScreen=""></iframe>
+                  </div>
+                }
 
                 <Partials.BlockTitle title="вам может быть интересно:" className="text-left no-margin" />
                 <div class="posts">
@@ -139,59 +185,60 @@ export default class Post extends React.Component {
                   }
                 </div>
 
-                <div class="section-header text-left no-margin">
-                  <div class="title-wrapper">
-                    <div class="heading-1">коментарии:</div>
-                  </div>
-                  <div class="description"></div>
-                </div>
+                <Partials.BlockTitle title="коментарии:" className="text-left no-margin" />
                 <div class="comments">
-                  <div class="comment-wrapper clear">
-                    <div class="quote left">
-                      <img src="img/article/quote.png" alt="Quote" />
-                    </div>
-                    <div class="comment left">
-                      <div class="user-date">
-                        <span class="fw-600">Александр |</span>
-                        <span class="date color-green">12.05.2017</span>
+                  {
+                    this.state.post.comments.map(({id, userName, comment, dateCreated}) => (
+                      <div key={id} class="comment-wrapper clear">
+                        <div class="quote left">
+                          <img src={require('../../staticFiles/img/article/quote.png')} alt="Quote" />
+                        </div>
+                        <div class="comment left">
+                          <div class="user-date">
+                            <span class="fw-600">{userName} | </span>
+                            <span class="date color-green">{Moment(dateCreated * 1000).format('DD.MM.YYYY HH:mm')}</span>
+                          </div>
+                          <p class="text">
+                            {comment}
+                          </p>
+                        </div>
+                        <div class="hr right"></div>
                       </div>
-                      <p class="text">
-                        Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты. Когда от милой моей долины поднимается пар и полдневное солнце стоит над непроницаемой чащей темного леса и лишь редкий луч проскальзывает в его святая святых, а я лежу в высокой траве у быстрого ручья и, прильнув к земле, вижу тысячи всевозможных былинок и чувствую.
-                      </p>
-                    </div>
-                    <div class="hr right"></div>
-                  </div>
-                  <div class="comment-wrapper clear">
-                    <div class="quote left">
-                      <img src="img/article/quote.png" alt="Quote" />
-                    </div>
-                    <div class="comment left">
-                      <div class="user-date">
-                        <span class="fw-600">Виолетта |</span>
-                        <span class="date color-green">12.05.2017</span>
-                      </div>
-                      <p class="text">
-                        Ни одного штриха не мог бы я сделать, а никогда не был таким большим художником, как в эти минуты.
-                      </p>
-                    </div>
-                    <div class="hr right"></div>
-                  </div>
+                    ))
+                  }
                   <div class="post-comment">
                     <div class="form-row">
                       <div class="fw-600">Ваше имя:</div>
-                      <input type="text" class="input w100p" placeholder="Ваше имя" value="" />
+                      <input
+                        type="text"
+                        class="input w100p"
+                        placeholder="Ваше имя"
+                        value={this.state.comment.userName}
+                        onChange={(e) => this.setState({
+                          comment: Object.assign(this.state.comment, { userName: e.target.value })
+                        })}
+                      />
+                      { this.state.comment.errorField === 'userName' && <small class="color-red no-wrap">{this.state.comment.errorMessage}</small> }
                     </div>
                     <div class="form-row">
                       <div class="fw-600">Ваш коментарий:</div>
-                      <textarea class="input textarea w100p" placeholder="Коментарий..."></textarea>
+                      <textarea
+                        class="input textarea w100p"
+                        placeholder="Коментарий..."
+                        value={this.state.comment.message}
+                        onChange={(e) => this.setState({
+                          comment: Object.assign(this.state.comment, { message: e.target.value })
+                        })}
+                      ></textarea>
+                      { this.state.comment.errorField === 'message' && <small class="color-red no-wrap">{this.state.comment.errorMessage}</small> }
+                      { this.state.comment.successMessage && <small class="color-green no-wrap">{this.state.comment.successMessage}</small> }
                     </div>
-                    <div class="btn-green">написать отзыв</div>
+                    <div class="btn-green" onClick={this.addComment.bind(this)}>написать отзыв</div>
                   </div>
                 </div>
               </div>
 
               <div class="sitebar">
-
                 <Partials.BlockTitle
                   title="хиты продаж:"
                   className="text-left no-margin"

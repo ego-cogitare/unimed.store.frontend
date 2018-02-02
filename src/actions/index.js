@@ -24,6 +24,10 @@ export function post({id}, success, error) {
     request(`/store/post/${id}`, {}, 'get', success, error);
 };
 
+export function addPostComment(params, success, error) {
+    request(`/store/post/${params.postId}/add-comment`, params, 'post', success, error);
+};
+
 export function page({id}, success, error) {
     request(`/store/page/${id}`, {}, 'get', success, error);
 };
