@@ -1,30 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Partials from './partials';
-import { products, category } from '../../actions';
+import { products, brand } from '../../actions';
 import { buildUrl } from '../../core/helpers/Utils';
 
-export default class SeparateCategory extends React.Component {
+export default class BrandProducts extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      category: {},
+      brand: {},
       products: []
     }
   }
 
   componentDidMount() {
-    category(
+    brand(
       { id: this.props.params.id },
-      (category) => this.setState({ category }),
+      (brand) => this.setState({ brand }),
       (error)  => console.error(error)
     );
-    
+
     products(
       {
-        filter: JSON.stringify({ categoryId: this.props.params.id }),
+        filter: JSON.stringify({ brandId: this.props.params.id }),
         orderBy: 'dateCreated',
         ascdesc: -1
       },
@@ -37,15 +37,15 @@ export default class SeparateCategory extends React.Component {
     return (
       <section>
         <Partials.PageTitle
-          breadcumbs={['Главная', this.state.category.title]}
-          title={this.state.category.title}
+          breadcumbs={['Главная', this.state.brand.title]}
+          title={this.state.brand.title}
         />
 
         <div class="wrapper categories">
           { /* If category picture is set */
-            this.state.category.picture &&
+            this.state.brand.picture &&
             <div class="cover">
-              <img src={buildUrl(this.state.category.picture)} alt={this.state.category.title} />
+              <img src={buildUrl(this.state.brand.cover)} alt={this.state.brand.title} />
             </div>
           }
           <div class="categories-list clear">
@@ -66,7 +66,7 @@ export default class SeparateCategory extends React.Component {
             ))
           }
           </div>
-          <div class="text-block text-center" dangerouslySetInnerHTML={{__html: this.state.category.description || ''}} />
+          <div class="text-block text-center" dangerouslySetInnerHTML={{__html: this.state.brand.description || ''}} />
         </div>
 
         <Partials.AdvertisingServices />

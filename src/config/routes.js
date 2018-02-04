@@ -32,6 +32,10 @@ const routes = {
       component: require('../components/pages/SeparateCategory.jsx').default
     },
     {
+      path: 'brand/:id',
+      component: require('../components/pages/BrandProducts.jsx').default
+    },
+    {
       path: 'product/:id',
       component: require('../components/pages/Product.jsx').default
     },
