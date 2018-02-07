@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Partials from './partials';
+import { paymentForm } from '../../actions';
 
 export default class Thanks extends React.Component {
 
@@ -8,7 +9,16 @@ export default class Thanks extends React.Component {
     super(props);
 
     this.state = {
+      paymentForm: ''
     };
+  }
+
+  componentDidMount() {
+    paymentForm(
+      { orderId: '1' },
+      ({ form: paymentForm }) => this.setState({ paymentForm }),
+      (error)  => console.error(error)
+    );
   }
 
   render() {
@@ -18,11 +28,15 @@ export default class Thanks extends React.Component {
 
         <div class="wrapper">
           <p class="text">
-            Благодарим за Вашу покупку. Мы свяжемся с Вами в ближайшее время.
+            Благодарим за Ваш заказ. Мы свяжемся с Вами в ближайшее время.
           </p>
           <br/>
           <br/>
           <br/>
+          {
+            this.state.paymentForm &&
+            <div dangerouslySetInnerHTML={{__html: this.state.paymentForm }} />
+          }
         </div>
 
         <Partials.AdvertisingServices />

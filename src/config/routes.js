@@ -44,7 +44,7 @@ const routes = {
       component: require('../components/pages/Checkout.jsx').default
     },
     {
-      path: 'thanks',
+      path: 'checkout/thanks',
       component: require('../components/pages/Thanks.jsx').default
     },
   ],

@@ -43,7 +43,7 @@ export default class BrandProducts extends React.Component {
 
         <div class="wrapper categories">
           { /* If category picture is set */
-            this.state.brand.picture &&
+            this.state.brand.cover &&
             <div class="cover">
               <img src={buildUrl(this.state.brand.cover)} alt={this.state.brand.title} />
             </div>

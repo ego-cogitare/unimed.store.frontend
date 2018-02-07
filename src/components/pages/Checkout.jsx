@@ -95,7 +95,7 @@ export default class Checkout extends React.Component {
         cart.reset();
 
         // Redirect to thanks page
-        location.href = '/thanks';
+        location.href = '/checkout/thanks';
       },
       (e) => {
         this.state.errors[e.responseJSON.field] = e.responseJSON.error;

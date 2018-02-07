@@ -51,3 +51,7 @@ export function categories(params, success, error) {
 export function checkout(params, success, error) {
     request(`/store/checkout`, params, 'post', success, error);
 };
+
+export function paymentForm(params, success, error) {
+    request(`/store/payment/form`, params, 'get', success, error);
+};
