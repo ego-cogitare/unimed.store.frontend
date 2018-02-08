@@ -47,6 +47,10 @@ const routes = {
       path: 'checkout/thanks',
       component: require('../components/pages/Thanks.jsx').default
     },
+    {
+      path: '/payment/liqpay/:id',
+      component: require('../components/pages/LiqPay.jsx').default
+    },
   ],
   // Custom route component handler depending of the user type
   custom: {

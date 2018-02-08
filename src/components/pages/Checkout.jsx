@@ -90,12 +90,14 @@ export default class Checkout extends React.Component {
     this.setState({ errors: [] });
     checkout(
       data,
-      (r) => {
+      ({ order }) => {
         // Flush cart
         cart.reset();
 
         // Redirect to thanks page
-        location.href = '/checkout/thanks';
+        location.href = (order.paymentId == '1517068714998')
+          ? `/payment/liqpay/${order.id}`
+          : '/checkout/thanks';
       },
       (e) => {
         this.state.errors[e.responseJSON.field] = e.responseJSON.error;
