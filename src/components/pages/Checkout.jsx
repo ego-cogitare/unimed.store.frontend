@@ -240,7 +240,9 @@ export default class Checkout extends React.Component {
               </div>
             </div>
           </div> :
-          <div class="wrapper">В корзине нет товаров. <Link to={`/category`} className="color-green">Продолжить покупки...</Link><br/><br/><br/><br/></div>
+          <div class="wrapper" style={{padding:'32px 0'}}>
+            В корзине нет товаров. <Link to={`/category`} className="color-green">Продолжить покупки...</Link>
+          </div>
         }
 
         <Partials.AdvertisingServices />
