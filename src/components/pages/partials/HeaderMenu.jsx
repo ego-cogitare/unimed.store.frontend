@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Phones from './Phones.jsx';
+import Socials from './Socials.jsx';
 
 export default class HeaderMenu extends React.Component {
 
@@ -7,11 +9,59 @@ export default class HeaderMenu extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    const context = this;
+
+    $(this.refs['burger-right']).on('click', function() {
+      $(this).toggleClass('opened');
+
+      if ($(this).hasClass('opened'))
+      {
+        $('.menu.right').addClass('opened');
+        $('html, body').addClass('no-scroll');
+        $(context.refs['burger-left']).removeClass('opened')
+          .siblings('.menu.left').removeClass('opened');
+      }
+      else
+      {
+        $('.menu.right').removeClass('opened');
+        $('html, body').removeClass('no-scroll');
+      }
+    });
+
+    $(this.refs['burger-left']).on('click', function() {
+      $(this).toggleClass('opened');
+
+      if ($(this).hasClass('opened'))
+      {
+        $(this).siblings('.menu.left').addClass('opened');
+        $('html, body').addClass('no-scroll');
+        $(context.refs['burger-right']).removeClass('opened');
+        $('.menu.right').removeClass('opened');
+      }
+      else
+      {
+        $(this).siblings('.menu.left').removeClass('opened');
+        $('html, body').removeClass('no-scroll');
+      }
+    });
+  }
+
   render() {
     return (
       <section>
         <div class="top-header">
           <div class="wrapper clear">
+            <div ref="burger-left" class="burger-menu left-menu">
+              <label class="left">
+                <span>&nbsp;</span>
+              </label>
+            </div>
+            <div ref="burger-right" class="burger-menu right-menu">
+              <label class="left">
+                <span>&nbsp;</span>
+              </label>
+            </div>
             <ul class="menu left clear">
               {
                 ((this.props.data.menu || []).children || []).map(({ id, link, title })=>(
@@ -21,23 +71,8 @@ export default class HeaderMenu extends React.Component {
                 ))
               }
             </ul>
-            <ul class="socials right">
-              <li class="item">
-                <a href="#" class="fa fa-youtube-play"></a>
-              </li>
-              <li class="item">
-                <a href="#" class="fa fa-facebook"></a>
-              </li>
-              <li class="item">
-                <a href="#" class="fa fa-instagram"></a>
-              </li>
-            </ul>
-            <div class="phones right">
-              <i class="fa fa-phone"></i>
-              <a class="phone" href="tel:0445269898">(044) 526-98-98</a>,
-              <a class="phone" href="tel:0445269899">(044) 526-98-99</a>,
-              <a class="phone" href="tel:0443613430">(044) 361-34-30</a>
-            </div>
+            <Socials />
+            <Phones icon={true} />
           </div>
         </div>
       </section>

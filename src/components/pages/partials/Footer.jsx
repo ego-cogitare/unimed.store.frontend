@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Socials from './Socials.jsx';
 
 export default class LeftMenu extends React.Component {
   render() {
@@ -73,17 +74,7 @@ export default class LeftMenu extends React.Component {
             <p class="heading-3 email">
               <span class="heading-4 fw-500">e-mail:</span> <a class="fw-100" href="mailto:n.suzdaltseva@junimed.ua">n.suzdaltseva@junimed.ua</a>
             </p>
-            <ul class="socials right">
-              <li class="item">
-                <a href="#" class="fa fa-youtube-play"></a>
-              </li>
-              <li class="item">
-                <a href="#" class="fa fa-facebook"></a>
-              </li>
-              <li class="item">
-                <a href="#" class="fa fa-instagram"></a>
-              </li>
-            </ul>
+            <Socials />
           </div>
         </div>
       </footer>

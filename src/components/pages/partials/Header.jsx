@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 import { subscribe, unsubscribe } from '../../../core/helpers/EventEmitter';
+import Phones from './Phones.jsx';
 
 export default class Header extends React.Component {
 
@@ -65,15 +66,18 @@ export default class Header extends React.Component {
               <Link class={classNames('fa fa-shopping-basket', {'empty-cart':!this.state.cartProductCount})} data-count={this.state.cart.totalCount} to="/checkout"></Link>
             </li>
           </ul>
-          <ul class="menu right">
-            {
-              ((this.props.data.menu || []).children || []).map(({ id, link, title })=>(
-                <li key={id} class="item">
-                  <Link to={link} activeClassName="active">{title}</Link>
-                </li>
-              ))
-            }
-          </ul>
+          <div class="menu right">
+            <ul>
+              {
+                ((this.props.data.menu || []).children || []).map(({ id, link, title })=>(
+                  <li key={id} class="item">
+                    <Link to={link} activeClassName="active">{title}</Link>
+                  </li>
+                ))
+              }
+            </ul>
+            <Phones />
+          </div>
         </div>
       </header>
     );

@@ -72,9 +72,26 @@ export default class Product extends React.Component {
 
         // Initialize discount ticker/check timer
         this.initDiscountTimer(product.discountTimeout);
+
+        // Adaptive adjustments
+        this.adjustMarkup();
       }),
       (error)  => console.error(error)
     );
+  }
+
+  adjustMarkup() {
+    $(window).bind('resize', () => {
+      var width = $('body').width();
+
+      if (width < 768) {
+        $(this.refs.awards).appendTo($(this.refs['product-picture']));
+      }
+      if (width >= 768 && width < 1024) {
+        $(this.refs.awards).insertBefore($(this.refs['general-info']));
+      }
+    })
+    .trigger('resize');
   }
 
   initDiscountTimer(timeout) {
@@ -199,7 +216,7 @@ export default class Product extends React.Component {
         <div class="wrapper product-page">
           <div class="product-view clear">
             <div class="column left">
-              <div class="clear product-picture">
+              <div ref="product-picture" class="clear product-picture">
                 <div class="product-thumbnails left">
                   <div id="product-thumbnails" class="swiper-container">
                     <ul class="swiper-wrapper">
@@ -232,7 +249,7 @@ export default class Product extends React.Component {
               }
             </div>
             <div class="column left clear">
-              <div class="general-info left">
+              <div ref="general-info" class="general-info left">
                 <div class="hr"></div>
                 <div class="sku-brand">
                   <span>Артикул: {this.state.product.sku}</span><i class="divider"></i><span>Бренд: {this.state.product.brand.title}</span>
@@ -303,7 +320,7 @@ export default class Product extends React.Component {
                       <a href="#tab-votes" onClick={this.setProductTab.bind(this, 'reviews')}>отзывы</a>
                     </li>
                   </ul>
-                  <div class="tabs-content">
+                  <div class="tabs-content text-left">
                     { /* If product desctiption tab is active */
                       this.state.productTab === 'description' &&
                       <div id="tab-description" class="tab-content visible">
@@ -401,8 +418,8 @@ export default class Product extends React.Component {
                   </div>
                 </div>
               </div>
-              {/*
-              <div class="awards left">
+              {
+              <div ref="awards" class="awards left">
                 <div class="award">
                   <img src="img/products/awards/award-2015.png" alt="Award 2015" />
                 </div>
@@ -413,7 +430,7 @@ export default class Product extends React.Component {
                   <img src="img/products/awards/award-2015.png" alt="Award 2015" />
                 </div>
               </div>
-              */}
+              }
             </div>
           </div>
           {/* Related products */
