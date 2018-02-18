@@ -23,7 +23,8 @@ export default class Header extends React.Component {
   componentDidMount() {
     $(this.refs['search']).on('click', function(e) {
       e.preventDefault();
-      $(this).next().focus().closest('.search').toggleClass('expanded');
+      $(this).parent().toggleClass('expanded')
+        .parent().siblings('.menu').toggleClass('fadeout');
     });
   }
 

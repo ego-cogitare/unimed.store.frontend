@@ -1,6 +1,7 @@
 export function buildUrl(file) {
   file = file || {};
-  return `${config.backUrl}${file.path}/${file.name}`;
+
+  return file.path ? `${config.backUrl}${file.path}/${file.name}` : `/images/no-picture.jpg`;
 };
 
 export function currencyIcon(code) {

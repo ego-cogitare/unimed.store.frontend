@@ -149,37 +149,42 @@ export default class Home extends React.Component {
             </div>
           </div>
         </div>
-
-        <div class="wrapper">
-          <Partials.BlockTitle title="Новинки" description="впервые в продаже" />
-        </div>
-        <div class="wrapper">
-          <Partials.ProductsList
-            products={this.state.productsNew}
-            className="new"
-          />
-        </div>
-
-        <div class="wrapper">
-          <Partials.BlockTitle title="Акция" description="лимитированные товары" />
-        </div>
-        <div class="wrapper">
-          <Partials.ProductsList
-            products={this.state.productsAction}
-            className="sale"
-          />
-        </div>
-        <div class="wrapper btns-section btns-products">
-          { this.state.productsActionMore &&
-            <div class="btn load-more" onClick={this.actionProductsLoad.bind(this)}>
-              загрузить еще
+        { this.state.productsNew.length > 0 &&
+          <div>
+            <div class="wrapper">
+              <Partials.BlockTitle title="Новинки" description="впервые в продаже" />
             </div>
-          }
-          <Link to="/category/5a64661f1d41c808335c2a32" className="btn btn-green see-all">
-            посмотреть все
-          </Link>
-        </div>
-
+            <div class="wrapper">
+              <Partials.ProductsList
+                products={this.state.productsNew}
+                className="new"
+              />
+            </div>
+          </div>
+        }
+        { this.state.productsAction.length > 0 &&
+          <div>
+            <div class="wrapper">
+              <Partials.BlockTitle title="Акция" description="лимитированные товары" />
+            </div>
+            <div class="wrapper">
+              <Partials.ProductsList
+                products={this.state.productsAction}
+                className="sale"
+              />
+            </div>
+            <div class="wrapper btns-section btns-products">
+              { this.state.productsActionMore &&
+                <div class="btn load-more" onClick={this.actionProductsLoad.bind(this)}>
+                  загрузить еще
+                </div>
+              }
+              <Link to="/category/5a64661f1d41c808335c2a32" className="btn btn-green see-all">
+                посмотреть все
+              </Link>
+            </div>
+          </div>
+        }
         <div class="wrapper">
           <Partials.BlockTitle title="Блог" description="полезные статьи" />
         </div>

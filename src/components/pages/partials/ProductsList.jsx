@@ -24,7 +24,7 @@ export default class ProductsList extends React.Component {
                 <div class="product-wrapper">
                   <div class="picture">
                     <Link to={`/product/${id}`}>
-                      { picture && <img src={buildUrl(picture)} alt={title} /> }
+                      { picture ? <img src={buildUrl(picture)} alt={title} /> : <img src={require('../../../staticFiles/img/no-picture.jpg')} alt="No picture available" /> }
                     </Link>
                   </div>
                   <div class="icon"></div>
