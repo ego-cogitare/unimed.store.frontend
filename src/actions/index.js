@@ -55,3 +55,7 @@ export function checkout(params, success, error) {
 export function paymentForm(params, success, error) {
     request(`/store/payment/form`, params, 'get', success, error);
 };
+
+export function buyInClick(params, success, error) {
+    request(`/store/callback`, params, 'post', success, error);
+};

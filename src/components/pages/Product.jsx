@@ -6,7 +6,7 @@ import { dispatch } from '../../core/helpers/EventEmitter';
 import Partials from './partials';
 import { buildUrl, currencyIcon, viewHistoryPush, viewHistoryList, calcProductRealPrice } from '../../core/helpers/Utils';
 import Settings from '../../core/helpers/Settings';
-import { product, addProductReview } from '../../actions';
+import { product, addProductReview, buyInClick } from '../../actions';
 
 export default class Product extends React.Component {
 
@@ -38,11 +38,14 @@ export default class Product extends React.Component {
       reviewComment: '',
       reviewError: '',
       reviewSuccess: '',
-      
-      buyInClickUserName: '',
-      buyInClickUserPhone: '',
-      buyInClickError: '',
-      buyInClickSuccess: '',
+
+      buyInClick: {
+        userName: '',
+        userPhone: '',
+        userNameError: '',
+        userPhoneError: '',
+        messageSuccess: ''
+      }
     };
   }
 
@@ -209,26 +212,46 @@ export default class Product extends React.Component {
     this.setState({ cartAddProgress: true })
     setTimeout(() => this.setState({ cartAddProgress: false }), 1500);
   }
-  
+
   doBuyInClick(e) {
     e.preventDefault();
-    this.setState({ buyInClickError: '', buyInClickSuccess: '' });
-    
+
+    Object.assign(
+      this.state.buyInClick,
+      { userNameError: '',
+        userPhoneError: '',
+        messageSuccess: '' }
+    );
+    this.setState({ buyInClick: this.state.buyInClick });
+
     // Send buy in one click request
     buyInClick(
-      { userName: this.state.buyInClickUserName, 
-        userPhone: this.state.buyInClickUserPhone },
-      (r) => this.setState(
-        { buyInClickSuccess: r.message }, 
-        () => setTimeout(() => this.setState({
-                buyInClickUserName: '',
-                buyInClickUserPhone: '',
-                buyInClickSuccess: ''
-              }), 3500)
-      ),
-      (e) => this.setState({ buyInClickError: e.responseJSON.error })
+      { userName: this.state.buyInClick.userName,
+        userPhone: this.state.buyInClick.userPhone },
+      ({message}) => {
+        this.state.buyInClick.messageSuccess = message;
+        this.setState({ buyInClick: this.state.buyInClick });
+      },
+      (e) => {
+        this.state.buyInClick[`${e.responseJSON.field}Error`] = e.responseJSON.error;
+        this.setState({ buyInClick: this.state.buyInClick });
+      }
     );
-    // console.log('Do buy in click', userName, userPhone);
+  }
+
+  popupBuyInClickOpen(e) {
+    e.preventDefault();
+    Object.assign(
+      this.state.buyInClick,
+      { userName: '',
+        userPhone: '',
+        userNameError: '',
+        userPhoneError: '',
+        messageSuccess: '' }
+    );
+    this.setState({ buyInClick: this.state.buyInClick });
+    $('html, body').addClass('no-scroll');
+    $(this.refs['popup-buy-in-click']).addClass('opened');
   }
 
   render() {
@@ -333,11 +356,7 @@ export default class Product extends React.Component {
                   >
                     {this.state.cartAddProgress ? <span>добавление...</span> : <span>добавить в корзину</span>}
                   </div>
-                  <div class="btn left" onClick={(e) => {
-                    e.preventDefault();
-                    $('html, body').addClass('no-scroll');
-                    $(this.refs['popup-buy-in-click']).addClass('opened');
-                  }}>купить в один клик</div>
+                  <div class="btn left" onClick={this.popupBuyInClickOpen.bind(this)}>купить в один клик</div>
                 </div>
                 <div class="hr"></div>
                 <div class="tabs-wrapper">
@@ -403,7 +422,6 @@ export default class Product extends React.Component {
                               </div>
                             ))
                           }
-
                           <div class="heading-2">Оставить отзыв</div>
                           <div class="post-review">
                             <div class="form-row clear">
@@ -476,40 +494,51 @@ export default class Product extends React.Component {
           <div class="text-block text-center"
                dangerouslySetInnerHTML={{ __html: this.state.product.description }} />
         </div>
-        
+
         <div class="popup" ref="popup-buy-in-click">
           <i class="fa fa-remove close" onClick={(e) => {
             $(this.refs['popup-buy-in-click']).removeClass('opened');
             $('html, body').removeClass('no-scroll');
           }}></i>
-          <div class="buy-in-click">
-            <div class="form-row">
-              <span class="fw-600 left">Ваше имя:</span>
-              <input 
-                type="text" 
-                class="input w100p" 
-                placeholder="Ваше имя" 
-                value={this.state.buyInClickUserName} 
-                onChange={(e) => this.setState({ buyInClickUserName: e.target.value })} 
-              />
+          { /* Buy in one click popup */
+            this.state.buyInClick.messageSuccess ?
+            <div class="text-center">{this.state.buyInClick.messageSuccess}</div> :
+            <div class="buy-in-click">
+              <div class="form-row">
+                <span class="fw-600 left">Ваше имя: *</span>
+                <input
+                  type="text"
+                  class="input w100p"
+                  placeholder="Ваше имя"
+                  value={this.state.buyInClick.userName || ''}
+                  onChange={(e) => {
+                    this.state.buyInClick.userName = e.target.value;
+                    this.setState({ buyInClick: this.state.buyInClick });
+                  }}
+                />
+                { this.state.buyInClick.userNameError && <small class="color-red no-wrap">{this.state.buyInClick.userNameError}</small> }
+              </div>
+              <div class="form-row">
+                <span class="fw-600 left">Номер телефона: *</span>
+                <input
+                  type="text"
+                  class="input w100p"
+                  placeholder="Номер телефона: 0501234567"
+                  maxLength="10"
+                  value={this.state.buyInClick.userPhone || ''}
+                  onChange={(e) => {
+                    this.state.buyInClick.userPhone = e.target.value;
+                    this.setState({ buyInClick: this.state.buyInClick });
+                  }}
+                />
+                { this.state.buyInClick.userPhoneError && <small class="color-red no-wrap">{this.state.buyInClick.userPhoneError}</small> }
+              </div>
+              <div class="btn-green" onClick={this.doBuyInClick.bind(this)}>перезвоните мне</div>
             </div>
-            <div class="form-row">
-              <span class="fw-600 left">Номер телефона: *</span>
-              <input 
-                type="text" 
-                class="input w100p" 
-                placeholder="Ваш номер телефона" 
-                value={this.state.buyInClickUserPhone} 
-                onChange={(e) => this.setState({ buyInClickUserPhone: e.target.value })}
-              />
-            </div>
-            <div class="btn-green" onClick={this.doBuyInClick.bind(this)}>перезвоните мне</div>
-            { this.state.buyInClickError && <small class="color-red no-wrap">{this.state.buyInClickError}</small> }
-            { this.state.buyInClickSuccess && <small class="color-green no-wrap">{this.state.buyInClickSuccess}</small> }
-          </div>
+          }
         </div>
         <div class="curtain" />
-        
+
         <Partials.AdvertisingServices />
       </section>
     );
