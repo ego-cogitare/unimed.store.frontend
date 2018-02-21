@@ -21,6 +21,7 @@ export default class Product extends React.Component {
         category: {},
         relatedProducts: [],
         pictures: [],
+        awards: [],
         properties: [],
       },
       currencyCode: currencyIcon(Settings.get('currencyCode')),
@@ -465,18 +466,17 @@ export default class Product extends React.Component {
                   </div>
                 </div>
               </div>
-              {
-              <div ref="awards" class="awards left">
-                <div class="award">
-                  <img src="img/products/awards/award-2015.png" alt="Award 2015" />
+              { /* Product awards */
+                this.state.product.awards.length > 0 &&
+                <div ref="awards" class="awards left">
+                {
+                  this.state.product.awards.map((picture) => (
+                    <div key={picture.id} class="award">
+                      <img src={buildUrl(picture)} alt="" />
+                    </div>
+                  ))
+                }
                 </div>
-                <div class="award">
-                  <img src="img/products/awards/award-2016.png" alt="Award 2016" />
-                </div>
-                <div class="award">
-                  <img src="img/products/awards/award-2015.png" alt="Award 2015" />
-                </div>
-              </div>
               }
             </div>
           </div>
