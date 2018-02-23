@@ -10,12 +10,11 @@ export default class Facebook extends React.Component {
   }
 
   componentDidMount() {
-
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
-      js.src = 'https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.12&appId=445960508768647&autoLogAppEvents=1';
+      js.src = `https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.12&appId=${config.FACEBOOK_APP}&autoLogAppEvents=1`;
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
   }
@@ -25,7 +24,7 @@ export default class Facebook extends React.Component {
       <div>
         <div id="fb-root"></div>
         <div class="fb-page"
-          data-href="https://www.facebook.com/elartistics"
+          data-href={config.FACEBOOK_PAGE}
           data-tabs="timeline"
           data-small-header="false"
           data-hide-cover="false"
