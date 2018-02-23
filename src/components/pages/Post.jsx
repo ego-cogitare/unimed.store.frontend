@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Partials from './partials';
 import { blog, post, products, tags, addPostComment } from '../../actions';
 import { buildUrl, getRandomOrder } from '../../core/helpers/Utils';
+import SocialWidgets from '../widgets';
 
 export default class Post extends React.Component {
 
@@ -239,15 +240,19 @@ export default class Post extends React.Component {
               </div>
 
               <div class="sitebar">
-                <Partials.BlockTitle
-                  title="хиты продаж:"
-                  className="text-left no-margin"
-                />
-                <Partials.ProductsList
-                  products={this.state.bestsellers}
-                  className="no-hover-border no-hover-btn"
-                />
-
+                { // Bestsellers
+                  this.state.bestsellers.length > 0 &&
+                  <Partials.BlockTitle
+                    title="хиты продаж:"
+                    className="text-left no-margin"
+                  />
+                }{ // Bestsellers
+                  this.state.bestsellers.length > 0 &&
+                  <Partials.ProductsList
+                    products={this.state.bestsellers}
+                    className="no-hover-border no-hover-btn"
+                  />
+                }
                 <div class="heading-1">
                   поиск по тегам:
                 </div>
@@ -263,12 +268,9 @@ export default class Post extends React.Component {
                   ))
                 }
                 </ul>
-
                 <ul class="widgets">
                   <li class="widget">
-                    <a href="#">
-                      <img src={require('../../staticFiles/img/sitebar/widget-banner.jpg')} alt="Banner" />
-                    </a>
+                    <SocialWidgets.Facebook />
                   </li>
                   <li class="widget">
                     <a href="#">
@@ -279,7 +281,6 @@ export default class Post extends React.Component {
               </div>
             </div>
         }
-
         <Partials.AdvertisingServices />
       </section>
     );

@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import Partials from './partials';
 import { blog, tags } from '../../actions';
 import { buildUrl } from '../../core/helpers/Utils';
+import SocialWidgets from '../widgets';
 
 export default class Blog extends React.Component {
 
@@ -110,19 +111,7 @@ export default class Blog extends React.Component {
             </ul>
             <ul class="widgets">
               <li class="widget">
-                <a href="#">
-                  <img src={require('../../staticFiles/img/sitebar/widget-facebook.jpg')} alt="Facebook" />
-                </a>
-              </li>
-              <li class="widget">
-                <a href="#">
-                  <img src={require('../../staticFiles/img/sitebar/widget-vk.jpg')} alt="VK" />
-                </a>
-              </li>
-              <li class="widget">
-                <a href="#">
-                  <img src={require('../../staticFiles/img/sitebar/widget-instagram.jpg')} alt="Instagram" />
-                </a>
+                <SocialWidgets.Facebook />
               </li>
               <li class="widget">
                 <a href="#">
