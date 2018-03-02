@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Partials from './partials';
+import SocialWidgets from '../widgets';
 
 export default class Contacts extends React.Component {
 
@@ -66,9 +67,7 @@ export default class Contacts extends React.Component {
             <ul class="widgets">
               <li class="widget">
                 <i class="fa fa-facebook"></i>
-                <a href="#">
-                  <img src={require('../../staticFiles/img/sitebar/widget-facebook.jpg')} alt="Facebook" />
-                </a>
+                <SocialWidgets.Facebook />
               </li>
             </ul>
           </div>

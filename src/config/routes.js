@@ -12,8 +12,8 @@ const routes = {
       component: require('../components/pages/Contacts.jsx').default
     },
     {
-      path: 'about-us(/:id)',
-      component: require('../components/pages/AboutUs.jsx').default
+      path: ['about-us(/:id)', 'delivery(/:id)'],
+      component: require('../components/pages/WithMenu.jsx').default
     },
     {
       path: 'blog',
@@ -52,37 +52,14 @@ const routes = {
       component: require('../components/pages/LiqPay.jsx').default
     },
   ],
-  // Custom route component handler depending of the user type
-  custom: {
-    ROLE_DEFAULT: {
-      available: '*'
-    },
-    ROLE_AUTHORIZED: {
-    },
-  },
-
 
   resolve: function (route) {
-    // Get logged user data
-    const loggedUser = {
-      role: 'ROLE_DEFAULT'
-    };
-
-    // Check if route available for the user
-    if (this.custom[loggedUser.role].available !== '*' && this.custom[loggedUser.role].available.indexOf(route) === -1) {
-      return () => <div>Not available.</div>;
-    }
-
-    // Get custom component for the current user rolename and route path
-    const customRoute = (this.custom[loggedUser.role].override || []).filter((r) => r.path === route);
-
-    // If custom route found
-    if (customRoute.length > 0) {
-      return customRoute[0].component;
-    }
-
     // Return default route component
-    return this.default.filter((r) => r.path === route)[0].component;
+    const component = this.default.filter(
+      (r) => r.path === route || r.path.indexOf(route) !== -1
+    )[0].component;
+
+    return component;
   }
 };
 

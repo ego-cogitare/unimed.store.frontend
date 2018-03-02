@@ -101,7 +101,15 @@ export default class Checkout extends React.Component {
       },
       (e) => {
         this.state.errors[e.responseJSON.field] = e.responseJSON.error;
-        this.setState({ errors: this.state.errors });
+        this.setState({
+            errors: this.state.errors
+          },
+          () => {
+            // Scroll to first errored field
+            const $erroredField = $('small:not(:empty)');
+            $erroredField.length > 0 && $('html, body').animate({ scrollTop: $erroredField.offset().top - 55 }, 500);
+          }
+        );
       }
     );
   }

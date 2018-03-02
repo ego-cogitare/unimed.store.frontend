@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import { Link } from 'react-router';
 import Partials from './partials';
 import { buildUrl } from '../../core/helpers/Utils';
+import { subscribe, unsubscribe } from '../../core/helpers/EventEmitter';
 import { categories, products } from '../../actions';
 
 export default class Category extends React.Component {
@@ -24,10 +25,48 @@ export default class Category extends React.Component {
         field: 'dateCreated',
         ascdesc: 1,
       },
-      jRange: [0, 1400]
+      jRange: [0, 1]
     };
-
+    
+    this.bootstrap = this.bootstrapListener.bind(this);
     this.filterReset();
+  }
+
+  componentWillMount() {
+    subscribe('bootstrap', this.bootstrap);
+  }
+
+  componentWillUnmount() {
+    unsubscribe('bootstrap', this.bootstrap);
+  }
+
+  bootstrapListener({ prices }) {
+    this.setState({ jRange: [0, prices.maxPrice] }, () => {
+      $(this.refs['price-range']).jRange({
+        from: this.state.jRange[0],
+        to: this.state.jRange[1],
+        step: 1,
+        scale: [],
+        format: '%s',
+        width: 'calc(100% - 25px)',
+        showLabels: false,
+        isRange : true,
+        onstatechange: (value) => {
+          var values = value.split(',');
+          $(this.refs['price-range-from']).text(values[0]);
+          $(this.refs['price-range-to']).text(values[1]);
+        },
+        ondragend: (value) => {
+          // Update filter
+          const [from, to] = value.split(',');
+          this.filter['$and'][0].price['$gte'] = Number(from);
+          this.filter['$and'][1].price['$lte'] = Number(to);
+
+          // Update products list
+          this.fetchProducts(JSON.stringify(this.filter));
+        }
+      });
+    });
   }
 
   filterReset() {
@@ -61,31 +100,6 @@ export default class Category extends React.Component {
       (error)  => console.error(error)
     );
     this.resolveState(this.props);
-
-    $(this.refs['price-range']).jRange({
-      from: this.state.jRange[0],
-      to: this.state.jRange[1],
-      step: 1,
-      scale: [],
-      format: '%s',
-      width: 'calc(100% - 25px)',
-      showLabels: false,
-      isRange : true,
-      onstatechange: (value) => {
-        var values = value.split(',');
-        $(this.refs['price-range-from']).text(values[0]);
-        $(this.refs['price-range-to']).text(values[1]);
-      },
-      ondragend: (value) => {
-        // Update filter
-        const [from, to] = value.split(',');
-        this.filter['$and'][0].price['$gte'] = Number(from);
-        this.filter['$and'][1].price['$lte'] = Number(to);
-
-        // Update products list
-        this.fetchProducts(JSON.stringify(this.filter));
-      }
-    });
   }
 
   componentWillReceiveProps(props) {
@@ -199,6 +213,7 @@ export default class Category extends React.Component {
                   <input type="hidden" ref="price-range" class="slider-input" defaultValue={this.state.jRange[1]} />
                 </div>
               </div>
+              {/*
               <div class="tags-wrapper">
                 <div class="heading-3 fw-500">размер:</div>
                 <ul class="tags">
@@ -249,6 +264,7 @@ export default class Category extends React.Component {
                   </li>
                 </ul>
               </div>
+              */}
             </div>
           </div>
           <div class="content">

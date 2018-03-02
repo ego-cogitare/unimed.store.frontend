@@ -47,6 +47,13 @@ export default class HeaderMenu extends React.Component {
     });
   }
 
+  componentWillReceiveProps() {
+    $(this.refs['burger-right']).add(this.refs['burger-left']).removeClass('opened');
+    $('.menu.right').removeClass('opened');
+    $(this.refs['burger-left']).siblings('.menu.left').removeClass('opened');
+    $('html, body').removeClass('no-scroll');
+  }
+
   render() {
     return (
       <section>

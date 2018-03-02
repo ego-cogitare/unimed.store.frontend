@@ -7,14 +7,20 @@ import { buildUrl } from '../../core/helpers/Utils';
 import { subscribe, unsubscribe } from '../../core/helpers/EventEmitter';
 import { page } from '../../actions';
 
-export default class AboutUs extends React.Component {
+export default class WithMenu extends React.Component {
 
   constructor(props) {
     super(props);
 
+    this.routeToMenu = {
+      'about-us(/:id)': '5a6da24fc7125460ffb53faa',
+      'delivery(/:id)': '5a9932cf13bf175d9f23b0e1',
+    };
+
     this.state = {
       menu: [],
-      content: ''
+      content: '',
+      pageTitle: ''
     };
 
     this.bootstrap = this.bootstrapListener.bind(this);
@@ -31,7 +37,12 @@ export default class AboutUs extends React.Component {
   loadPage(pageId) {
     page(
       { id: pageId },
-      ({body}) => this.setState({ content: body }),
+      ({ body }) => this.setState({
+        content: body,
+        pageTitle: (this.state.menu.children.find(
+          ({ link }) => link.match(new RegExp(pageId))
+        ) || {}).title
+      }),
       (e) => console.error(e)
     );
   }
@@ -46,10 +57,10 @@ export default class AboutUs extends React.Component {
     props.params.id && this.loadPage(props.params.id);
   }
 
-  // On meno is loaded
+  // On menu is loaded
   bootstrapListener({ menus }) {
     this.setState({
-        menu: menus['5a6da24fc7125460ffb53faa']
+        menu: menus[this.routeToMenu[this.props.route.path]]
       },
       // If display page id not set - show first page from menu
       () => !this.props.params.id && this.loadPage(this.state.menu.children[0].link.split('/').pop())
@@ -59,7 +70,7 @@ export default class AboutUs extends React.Component {
   render() {
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'О нас']} title="О нас" />
+        <Partials.PageTitle breadcumbs={['Главная', 'О нас', this.state.pageTitle]} title={this.state.pageTitle} />
 
         <div class="wrapper catalog clear">
           <div class="sitebar">
