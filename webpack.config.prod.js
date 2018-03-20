@@ -33,7 +33,7 @@ module.exports = {
       },
       {
         test: /\.(svg|png|jpg|jpeg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "file-loader?name=images/[hash:8].[ext]"
+        loader: "file-loader?name=images/[name].[ext]"
       },
       {
         test: /\.(woff|woff2|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -59,14 +59,14 @@ module.exports = {
       template: 'src/staticFiles/index.ejs',
       externalSources: {
         css: [
-          './vendors/font-awesome/css/font-awesome.min.css',
-          './vendors/jRange/jquery.range.css',
-          './vendors/swiper/dist/css/swiper.min.css',
+          '/vendors/font-awesome/css/font-awesome.min.css',
+          '/vendors/jRange/jquery.range.css',
+          '/vendors/swiper/dist/css/swiper.min.css',
         ],
         js: [
-          './vendors/jquery/dist/jquery.min.js',
-          './vendors/swiper/dist/js/swiper.min.js',
-          './vendors/jRange/jquery.range-min.js',
+          '/vendors/jquery/dist/jquery.min.js',
+          '/vendors/swiper/dist/js/swiper.min.js',
+          '/vendors/jRange/jquery.range-min.js',
         ]
       },
       minify: {
