@@ -27,7 +27,7 @@ export default class Category extends React.Component {
       },
       jRange: [0, 1]
     };
-    
+
     this.bootstrap = this.bootstrapListener.bind(this);
     this.filterReset();
   }
@@ -41,6 +41,11 @@ export default class Category extends React.Component {
   }
 
   bootstrapListener({ prices }) {
+
+    this.filter['$and'][0].price['$gte'] = 0;
+    this.filter['$and'][1].price['$lte'] = Number(prices.maxPrice);
+    this.resolveState(this.props);
+
     this.setState({ jRange: [0, prices.maxPrice] }, () => {
       $(this.refs['price-range']).jRange({
         from: this.state.jRange[0],
@@ -99,7 +104,7 @@ export default class Category extends React.Component {
       (categories) => this.setState({ categories }),
       (error)  => console.error(error)
     );
-    this.resolveState(this.props);
+    // this.resolveState(this.props);
   }
 
   componentWillReceiveProps(props) {
