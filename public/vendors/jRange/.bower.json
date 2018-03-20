@@ -1,0 +1,13 @@
+{
+  "name": "jRange",
+  "homepage": "https://github.com/nitinhayaran/jRange",
+  "_release": "d1982f6766",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d1982f67663b1df3c0cfb7d37be7112b1a9691eb"
+  },
+  "_source": "https://github.com/nitinhayaran/jRange.git",
+  "_target": "*",
+  "_originalSource": "jRange"
+}

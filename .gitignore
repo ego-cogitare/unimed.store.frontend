@@ -1,4 +1,3 @@
-public/
 node_modules/
 src/config/config.dev.js
 src/config/config.prod.js
