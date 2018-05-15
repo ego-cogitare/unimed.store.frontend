@@ -128,19 +128,19 @@ export default class Home extends React.Component {
         </div>
         <div class="wrapper">
           <div ref="brands-slider" id="brands-slider" class="swiper-container">
-            <ul class="swiper-wrapper">
+            <div class="swiper-wrapper">
             {
               this.state.brands.map(({ id, picture, title }) => (
-                <li key={id} class="swiper-slide" style={{ backgroundImage: "url('" + buildUrl(picture) + "')" }}>
+                <Link to={`/brand/${id}`} key={id} class="swiper-slide" style={{ backgroundImage: "url('" + buildUrl(picture) + "')" }}>
                   <div class="figure"></div>
                   <div class="title">{title}</div>
                   <div class="btn-green">
-                    <Link to={`/brand/${id}`}>подробнее</Link>
+                    <span>подробнее</span>
                   </div>
-                </li>
+                </Link>
               ))
             }
-            </ul>
+            </div>
             <div class="slider-arrow btn-prev hide">
               <img src={require('../../staticFiles/img/home/slider/left-arrow.png')} alt="Previous" />
             </div>
@@ -165,7 +165,7 @@ export default class Home extends React.Component {
         { this.state.productsAction.length > 0 &&
           <div>
             <div class="wrapper">
-              <Partials.BlockTitle title="Акция" description="лимитированные товары" />
+              <Partials.BlockTitle title="Акция" description="акционные товары" />
             </div>
             <div class="wrapper">
               <Partials.ProductsList
@@ -179,9 +179,15 @@ export default class Home extends React.Component {
                   загрузить еще
                 </div>
               }
-              <Link to="/category/5a64661f1d41c808335c2a32" className="btn btn-green see-all">
-                посмотреть все
-              </Link>
+              <Link to={{ pathname: '/category', query: {
+                  page: 1,
+                  limit: 20,
+                  orderBy: 'title',
+                  ascdesc: 1,
+                  customFilter: JSON.stringify({ isAuction: true }),
+                }
+              }}
+              className="btn btn-green see-all">посмотреть все</Link>
             </div>
           </div>
         }
@@ -192,11 +198,9 @@ export default class Home extends React.Component {
           <div class="blog-preview">
           {
             this.state.posts.map(({ id, title, briefly, picture, pictureId }) => (
-              <div key={id} class="post">
+              <Link to={`/post/${id}`} key={id} class="post">
                 <div class="picture">
-                  <Link to={`/post/${id}`}>
                     <img src={buildUrl(picture)} alt={title} />
-                  </Link>
                 </div>
                 <div class="title">
                   {title}
@@ -207,7 +211,7 @@ export default class Home extends React.Component {
                     __html: briefly.length > 180 ? briefly.slice(0, 180).concat('&hellip;') : briefly
                   }}
                 />
-              </div>
+              </Link>
             ))
           }
           </div>

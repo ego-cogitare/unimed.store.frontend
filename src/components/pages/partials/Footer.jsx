@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Socials from './Socials.jsx';
+import moment from 'moment';
 
 export default class LeftMenu extends React.Component {
   render() {
@@ -14,9 +15,8 @@ export default class LeftMenu extends React.Component {
               </a>
             </div>
             <div class="text-small">
-              <p>©2016-2017 Junimed - ведущий импортер.</p>
+              <p>©2016-{moment().format('YYYY')} Junimed - ведущий импортер.</p>
               <p>Все права защищены.</p>
-              <p><a href="#" class="color-green">Политика конфиденциальности</a></p>
             </div>
           </div>
           <div class="links left">

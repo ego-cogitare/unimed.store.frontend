@@ -89,7 +89,10 @@ export default class Category extends React.Component {
         },
         {
           keyword: this.keyword
-        }
+        },
+        {
+          filter: this.filter
+        },
       ]
     };
   }
@@ -112,7 +115,7 @@ export default class Category extends React.Component {
   }
 
   resolveState(props) {
-    let { page: curPage, limit: current, orderBy, ascdesc, keyword } = queryString.parse(location.search);
+    let { page: curPage, limit: current, orderBy, ascdesc, keyword, customFilter } = queryString.parse(location.search);
 
     if (typeof curPage === 'undefined') {
       curPage = this.state.curPage;
@@ -128,6 +131,7 @@ export default class Category extends React.Component {
     }
 
     this.keyword = '';
+    this.customFilter = '';
 
     // Slice only price range filter
     this.filter['$and'] = this.filter['$and'].slice(0, 2);
@@ -141,6 +145,12 @@ export default class Category extends React.Component {
     if (keyword) {
       this.filter['$and'].push({ keyword });
       this.keyword = keyword;
+    }
+
+    // If custom filter provided
+    if (customFilter) {
+      this.customFilter = customFilter;
+      this.filter['$and'].push(JSON.parse(this.customFilter));
     }
 
     this.setState({
@@ -287,7 +297,8 @@ export default class Category extends React.Component {
                           limit: option,
                           orderBy: this.state.sort.field,
                           ascdesc: this.state.sort.ascdesc,
-                          keyword: this.keyword
+                          keyword: this.keyword,
+                          customFilter: this.customFilter,
                         }
                       }}>{option}</Link>
                     </li>
@@ -308,7 +319,8 @@ export default class Category extends React.Component {
                       limit: this.state.perPage.current,
                       orderBy: 'title',
                       ascdesc: this.state.sort.ascdesc * -1,
-                      keyword: this.keyword
+                      keyword: this.keyword,
+                      customFilter: this.customFilter,
                     }
                   }}>Названию</Link>
                 </li>
@@ -322,7 +334,8 @@ export default class Category extends React.Component {
                       limit: this.state.perPage.current,
                       orderBy: 'price',
                       ascdesc: this.state.sort.ascdesc * -1,
-                      keyword: this.keyword
+                      keyword: this.keyword,
+                      customFilter: this.customFilter,
                     }
                   }}>Цене</Link>
                 </li>
@@ -353,7 +366,8 @@ export default class Category extends React.Component {
                               limit: this.state.perPage.current,
                               orderBy: this.state.sort.field,
                               ascdesc: this.state.sort.ascdesc,
-                              keyword: this.keyword
+                              keyword: this.keyword,
+                              customFilter: this.customFilter,
                             }
                           }}
                           >{key + 1}</Link>
