@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const config = require('./src/config/config.dev');
 
 module.exports = {
   entry: './src/app.jsx',
@@ -61,6 +62,7 @@ module.exports = {
           '/vendors/jquery/dist/jquery.min.js',
           '/vendors/swiper/dist/js/swiper.min.js',
           '/vendors/jRange/jquery.range-min.js',
+          '//maps.googleapis.com/maps/api/js?sensor=false&key=' + config.GOOGLE_MAPS_API
         ]
       }
     })

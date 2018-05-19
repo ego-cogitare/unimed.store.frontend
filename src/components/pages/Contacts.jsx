@@ -9,6 +9,32 @@ export default class Contacts extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    const bounds = new google.maps.LatLngBounds();
+    const map = new google.maps.Map(this.refs['map-canvas'], { mapTypeId: 'roadmap' });
+    const markers = [
+        ['вулиця Авіаконструктора Антонова, 8, Чайки, Київська обл., 08130', 50.4359932, 30.306797],
+        ['вулиця Васильківська, 14, Київ, 02000', 50.3961549, 30.5015943]
+    ];
+    const infoWindow = new google.maps.InfoWindow();
+
+    markers.forEach(function(marker) {
+      const position = new google.maps.LatLng(marker[1], marker[2]);
+      bounds.extend(position);
+      new google.maps.Marker({
+          position: position,
+          map: map,
+          title: marker[0]
+      });
+      map.fitBounds(bounds);
+    });
+
+    // Fit bounds on window resize
+    $(window).bind('resize', function() {
+      map.fitBounds(bounds);
+    });
+  }
+
   render() {
     return (
       <section>
@@ -17,8 +43,8 @@ export default class Contacts extends React.Component {
         <div class="wrapper blog contacts clear">
           <div class="content clear">
             <div class="map-wrapper">
-              <div class="map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2747.5746613209785!2d30.745703615824926!3d46.47693237331671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c6319df8ae932d%3A0x364f4d9b31dd14f6!2z0LLRg9C70LjRhtGPINCa0LDQvdCw0YLQvdCwLCAzMywg0J7QtNC10YHQsCwg0J7QtNC10YHRjNC60LAg0L7QsdC70LDRgdGC0YwsIDY1MDAw!5e0!3m2!1sru!2sua!4v1515445034199" width="435" height="378" frameBorder="0" style={{ border: 0 }} allowFullScreen=""></iframe>
+              <div class="map" id="map">
+                <div ref="map-canvas" class="map-canvas"></div>
                 <div class="map-label">главный офис</div>
               </div>
             </div>

@@ -134,9 +134,6 @@ export default class Home extends React.Component {
                 <Link to={`/brand/${id}`} key={id} class="swiper-slide" style={{ backgroundImage: "url('" + buildUrl(picture) + "')" }}>
                   <div class="figure"></div>
                   <div class="title">{title}</div>
-                  <div class="btn-green">
-                    <span>подробнее</span>
-                  </div>
                 </Link>
               ))
             }

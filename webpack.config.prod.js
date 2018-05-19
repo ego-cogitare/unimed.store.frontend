@@ -3,6 +3,7 @@ const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackCleanupPlugin = require('webpack-cleanup-plugin');
+const config = require('./src/config/config.prod');
 
 module.exports = {
   entry: './src/app.jsx',
@@ -67,6 +68,7 @@ module.exports = {
           '/vendors/jquery/dist/jquery.min.js',
           '/vendors/swiper/dist/js/swiper.min.js',
           '/vendors/jRange/jquery.range-min.js',
+          '//maps.googleapis.com/maps/api/js?sensor=false&key=' + config.GOOGLE_MAPS_API
         ]
       },
       minify: {

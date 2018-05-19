@@ -20,7 +20,7 @@ export default class ProductsList extends React.Component {
               return null;
             }
             return (
-              <div key={id} class={classNames('product', this.props.className || {'new': isNovelty, 'sale': isAuction} )}>
+              <Link to={`/product/${id}`} key={id} className={classNames('product', this.props.className || {'new': isNovelty, 'sale': isAuction} )}>
                 <div class="product-wrapper">
                   <div class="picture">
                     <Link to={`/product/${id}`}>
@@ -35,12 +35,12 @@ export default class ProductsList extends React.Component {
                   </div>
                   <div class="price">{currencyIcon(Settings.get('currencyCode'))} {price.toFixed(2)}</div>
                   <div class="btn-green btn-buy">
-                    <Link to={`/product/${id}`}>
+                    <span>
                       {this.props.buyBtnText || 'Купить'}
-                    </Link>
+                    </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           }) :
           <span>Не найдено товаров удовлетворяющих критерию поиска.</span>
