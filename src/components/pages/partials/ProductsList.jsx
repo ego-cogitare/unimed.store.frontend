@@ -23,9 +23,7 @@ export default class ProductsList extends React.Component {
               <Link to={`/product/${id}`} key={id} className={classNames('product', this.props.className || {'new': isNovelty, 'sale': isAuction} )}>
                 <div class="product-wrapper">
                   <div class="picture">
-                    <Link to={`/product/${id}`}>
-                      { picture ? <img src={buildUrl(picture)} alt={title} /> : <img src={require('../../../staticFiles/img/no-picture.jpg')} alt="No picture available" /> }
-                    </Link>
+                    { picture ? <img src={buildUrl(picture)} alt={title} /> : <img src={require('../../../staticFiles/img/no-picture.jpg')} alt="No picture available" /> }
                   </div>
                   <div class="icon"></div>
                   <div class="title">

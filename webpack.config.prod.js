@@ -6,7 +6,7 @@ const WebpackCleanupPlugin = require('webpack-cleanup-plugin');
 const config = require('./src/config/config.prod');
 
 module.exports = {
-  entry: './src/app.jsx',
+  entry: ['babel-polyfill', './src/app.jsx'],
   devtool: null,
   output: {
     path: "./public",
@@ -52,7 +52,7 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({ config: 'config', cart: 'cart' }),
     new WebpackCleanupPlugin({
-      exclude: ['vendors/**/*', 'icons/**/*'],
+      exclude: ['vendors/**/*', 'icons/**/*', '.htaccess', 'index.php'],
     }),
     new HtmlWebpackPlugin({
       title: 'JUNIMED',

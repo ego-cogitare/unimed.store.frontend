@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import Layout from './components/pages/Layout.jsx';
 import Routes from './config/routes';
+import 'babel-polyfill';
 
 ReactDOM.render(
   <Router history={browserHistory}>
