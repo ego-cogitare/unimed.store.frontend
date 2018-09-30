@@ -40,10 +40,10 @@ export default class HomeSlider extends React.Component {
             </li>
          </ul>
          <div class="slider-arrow btn-prev">
-           <img src={require('../../../staticFiles/img/home/slider/left-arrow.png')} alt="Previous" />
+           <img src={require('../../../staticFiles/img/home/slider/left-arrow.png')} alt="Previous" title="Previous" />
          </div>
          <div class="slider-arrow btn-next">
-           <img src={require('../../../staticFiles/img/home/slider/right-arrow.png')} alt="Next" />
+           <img src={require('../../../staticFiles/img/home/slider/right-arrow.png')} alt="Next" title="Next" />
          </div>
       </div>
     );

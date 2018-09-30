@@ -42,7 +42,7 @@ export default class Header extends React.Component {
         <div class="header wrapper clear">
           <div class="logo">
             <Link to="/">
-              <img src={require('../../../staticFiles/img/header-logo.png')} alt="UNIMED" />
+              <img src={require('../../../staticFiles/img/header-logo.png')} alt="UNIMED" title="UNIMED" />
             </Link>
           </div>
           <ul class="search-cart right">

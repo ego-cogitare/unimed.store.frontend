@@ -70,7 +70,7 @@ export default class WithMenu extends React.Component {
   render() {
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'О нас', this.state.pageTitle]} title={this.state.pageTitle} />
+        <Partials.PageTitle breadcumbs={[<Link to='/'>Главная</Link>, 'О нас', this.state.pageTitle]} title={this.state.pageTitle} />
 
         <div class="wrapper catalog clear">
           <div class="sitebar">

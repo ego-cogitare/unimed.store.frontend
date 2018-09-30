@@ -11,7 +11,7 @@ export default class LeftMenu extends React.Component {
           <div class="copyrights left">
             <div class="logo">
               <a href="">
-                <img src={require('../../../staticFiles/img/footer/footer-logo.png')} alt="UNIMED" />
+                <img src={require('../../../staticFiles/img/footer/footer-logo.png')} alt="UNIMED" title="UNIMED" />
               </a>
             </div>
             <div class="text-small">
@@ -36,28 +36,28 @@ export default class LeftMenu extends React.Component {
             </p>
             <ul class="cards-list">
               <li>
-                <img src={require('../../../staticFiles/img/footer/cards/paypal.jpg')} alt="PayPal" />
+                <img src={require('../../../staticFiles/img/footer/cards/paypal.jpg')} alt="PayPal" title="PayPal" />
               </li>
               <li>
-                <img src={require('../../../staticFiles/img/footer/cards/ebay.jpg')} alt="ebay" />
+                <img src={require('../../../staticFiles/img/footer/cards/ebay.jpg')} alt="ebay" title="ebay" />
               </li>
               <li>
-                <img src={require('../../../staticFiles/img/footer/cards/cirius.jpg')} alt="Cirius" />
+                <img src={require('../../../staticFiles/img/footer/cards/cirius.jpg')} alt="Cirius" title="Cirius" />
               </li>
               <li>
-                <img src={require('../../../staticFiles/img/footer/cards/mastercard.jpg')} alt="MasterCard" />
+                <img src={require('../../../staticFiles/img/footer/cards/mastercard.jpg')} alt="MasterCard" title="MasterCard" />
               </li>
               <li>
-                <img src={require('../../../staticFiles/img/footer/cards/visa.jpg')} alt="Visa" />
+                <img src={require('../../../staticFiles/img/footer/cards/visa.jpg')} alt="Visa" title="Visa" />
               </li>
               <li>
-                <img src={require('../../../staticFiles/img/footer/cards/discover.jpg')} alt="Discover" />
+                <img src={require('../../../staticFiles/img/footer/cards/discover.jpg')} alt="Discover" title="Discover" />
               </li>
               <li>
-                <img src={require('../../../staticFiles/img/footer/cards/google.jpg')} alt="Google" />
+                <img src={require('../../../staticFiles/img/footer/cards/google.jpg')} alt="Google" title="Google" />
               </li>
               <li>
-                <img src={require('../../../staticFiles/img/footer/cards/maestro.jpg')} alt="Maestro" />
+                <img src={require('../../../staticFiles/img/footer/cards/maestro.jpg')} alt="Maestro" title="Maestro" />
               </li>
             </ul>
           </div>

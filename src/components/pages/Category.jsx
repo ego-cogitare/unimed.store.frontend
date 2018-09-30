@@ -186,7 +186,7 @@ export default class Category extends React.Component {
 
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'Каталог', category]} title={category} />
+        <Partials.PageTitle breadcumbs={[<Link to='/'>Главная</Link>, category]} title={category} />
 
         <div class="wrapper catalog clear">
           <div class="sitebar">

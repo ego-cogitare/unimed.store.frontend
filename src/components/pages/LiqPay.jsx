@@ -30,7 +30,7 @@ export default class LiqPay extends React.Component {
   render() {
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'Оплата покупки']} title="Оплата покупки через LiqPay." />
+        <Partials.PageTitle breadcumbs={[<Link to='/'>Главная</Link>, 'Оплата покупки']} title="Оплата покупки через LiqPay." />
 
         <div class="wrapper">
           { this.state.errorMessage &&

@@ -117,7 +117,7 @@ export default class Checkout extends React.Component {
   render() {
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'Оформление заказа']} title="Оформление заказа" />
+        <Partials.PageTitle breadcumbs={[<Link to='/'>Главная</Link>, 'Оформление заказа']} title="Оформление заказа" />
 
         {
           this.state.cart.products.length > 0 ?
@@ -137,7 +137,7 @@ export default class Checkout extends React.Component {
                       <div key={product.id} class="product clear">
                         <div class="picture">
                           <Link to={`/product/${product.id}`} target="_blank">
-                            <img height="75" src={buildUrl(product.picture)} alt={product.title} />
+                            <img height="75" src={buildUrl(product.picture)} alt={product.title} title={product.title} />
                           </Link>
                         </div>
                         <div class="description">

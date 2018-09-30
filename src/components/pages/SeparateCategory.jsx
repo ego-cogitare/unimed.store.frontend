@@ -21,7 +21,7 @@ export default class SeparateCategory extends React.Component {
       (category) => this.setState({ category }),
       (error)  => console.error(error)
     );
-    
+
     products(
       {
         filter: JSON.stringify({ categoryId: this.props.params.id }),
@@ -37,7 +37,7 @@ export default class SeparateCategory extends React.Component {
     return (
       <section>
         <Partials.PageTitle
-          breadcumbs={['Главная', this.state.category.title]}
+          breadcumbs={[<Link to='/'>Главная</Link>, this.state.category.title]}
           title={this.state.category.title}
         />
 
@@ -45,7 +45,7 @@ export default class SeparateCategory extends React.Component {
           { /* If category picture is set */
             this.state.category.picture &&
             <div class="cover">
-              <img src={buildUrl(this.state.category.picture)} alt={this.state.category.title} />
+              <img src={buildUrl(this.state.category.picture)} alt={this.state.category.title} title={this.state.category.title} />
             </div>
           }
           <div class="categories-list clear">
@@ -58,7 +58,7 @@ export default class SeparateCategory extends React.Component {
                   </div>
                   <div class="picture">
                     <Link to={`/product/${id}`}>
-                      <img src={buildUrl(picture)} alt={title} />
+                      <img src={buildUrl(picture)} alt={title} title={title} />
                     </Link>
                   </div>
                 </div>

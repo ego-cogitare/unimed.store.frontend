@@ -110,7 +110,7 @@ export default class Post extends React.Component {
     return (
       <section>
         <Partials.PageTitle
-          breadcumbs={['Главная', 'Блог', this.state.post.title]}
+          breadcumbs={[<Link to='/'>Главная</Link>, 'Блог', this.state.post.title]}
           title={this.state.post.title}
         />
 
@@ -120,7 +120,7 @@ export default class Post extends React.Component {
             <div class="content">
               <div class="body clear">
                   <div class="cover-wrapper left">
-                    <img src={buildUrl(this.state.post.picture)} alt={this.state.post.title} />
+                    <img src={buildUrl(this.state.post.picture)} alt={this.state.post.title} title={this.state.post.title} />
                   </div>
                   <div class="heading-1">
                     {this.state.post.title}
@@ -165,7 +165,7 @@ export default class Post extends React.Component {
                         <div class="post-wrapper">
                           <div class="picture">
                             <Link to={`/post/${id}`}>
-                              <img src={buildUrl(picture)} alt={title} />
+                              <img src={buildUrl(picture)} alt={title} title={title} />
                             </Link>
                           </div>
                           <span class="tag fw-600">
@@ -192,7 +192,7 @@ export default class Post extends React.Component {
                     this.state.post.comments.map(({id, userName, comment, dateCreated}) => (
                       <div key={id} class="comment-wrapper clear">
                         <div class="quote left">
-                          <img src={require('../../staticFiles/img/article/quote.png')} alt="Quote" />
+                          <img src={require('../../staticFiles/img/article/quote.png')} alt="Quote" title="Quote" />
                         </div>
                         <div class="comment left">
                           <div class="user-date">
@@ -274,7 +274,7 @@ export default class Post extends React.Component {
                   </li>
                   <li class="widget">
                     <a href="#">
-                      <img src={require('../../staticFiles/img/sitebar/widget-banner.jpg')} alt="Banner" />
+                      <img src={require('../../staticFiles/img/sitebar/widget-banner.jpg')} alt="Banner" title="Banner" />
                     </a>
                   </li>
                 </ul>

@@ -37,7 +37,7 @@ export default class BrandProducts extends React.Component {
     return (
       <section>
         <Partials.PageTitle
-          breadcumbs={['Главная', this.state.brand.title]}
+          breadcumbs={[<Link to='/'>Главная </Link>, this.state.brand.title]}
           title={this.state.brand.title}
         />
 
@@ -45,7 +45,7 @@ export default class BrandProducts extends React.Component {
           { /* If category picture is set */
             this.state.brand.cover &&
             <div class="cover">
-              <img src={buildUrl(this.state.brand.cover)} alt={this.state.brand.title} />
+              <img src={buildUrl(this.state.brand.cover)} alt={this.state.brand.title} title={this.state.brand.title} />
             </div>
           }
           <div class="categories-list clear">
@@ -58,7 +58,7 @@ export default class BrandProducts extends React.Component {
                   </div>
                   <div class="picture">
                     <Link to={`/product/${id}`}>
-                      <img src={buildUrl(picture)} alt={title} />
+                      <img src={buildUrl(picture)} alt={title} title={title} />
                     </Link>
                   </div>
                 </div>

@@ -38,7 +38,7 @@ export default class Contacts extends React.Component {
   render() {
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'Контакты']} title="Контакты" />
+        <Partials.PageTitle breadcumbs={[<Link to='/'>Главная</Link>, 'Контакты']} title="Контакты" />
 
         <div class="wrapper blog contacts clear">
           <div class="content clear">

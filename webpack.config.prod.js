@@ -52,7 +52,7 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({ config: 'config', cart: 'cart' }),
     new WebpackCleanupPlugin({
-      exclude: ['vendors/**/*', 'icons/**/*', '.htaccess', 'index.php'],
+      exclude: ['vendors/**/*', 'icons/**/*', '.htaccess', 'index.php', 'robots.txt'],
     }),
     new HtmlWebpackPlugin({
       title: 'JUNIMED',

@@ -8,7 +8,7 @@ export default class AdvertisingServices extends React.Component {
           <div class="service">
             <div class="service-wrapper clear">
               <div class="icon left">
-                <img src={require('../../../staticFiles/img/services/service-01.png')} alt="" />
+                <img src={require('../../../staticFiles/img/services/service-01.png')} alt="" title="" />
               </div>
               <div class="left">
                 <div class="title">Бесплатная доставка</div>
@@ -19,7 +19,7 @@ export default class AdvertisingServices extends React.Component {
           <div class="service">
             <div class="service-wrapper clear">
               <div class="icon left">
-                <img src={require('../../../staticFiles/img/services/service-02.png')} alt="" />
+                <img src={require('../../../staticFiles/img/services/service-02.png')} alt="" title="" />
               </div>
               <div class="left">
                 <div class="title">Наложеный платеж</div>
@@ -30,7 +30,7 @@ export default class AdvertisingServices extends React.Component {
           <div class="service">
             <div class="service-wrapper clear">
               <div class="icon left">
-                <img src={require('../../../staticFiles/img/services/service-03.png')} alt="" />
+                <img src={require('../../../staticFiles/img/services/service-03.png')} alt="" title="" />
               </div>
               <div class="left">
                 <div class="title">Гарантия качества</div>
@@ -41,7 +41,7 @@ export default class AdvertisingServices extends React.Component {
           <div class="service">
             <div class="service-wrapper clear">
               <div class="icon left">
-                <img src={require('../../../staticFiles/img/services/service-04.png')} alt="" />
+                <img src={require('../../../staticFiles/img/services/service-04.png')} alt="" title="" />
               </div>
               <div class="left">
                 <div class="title">Скидки клиентам</div>

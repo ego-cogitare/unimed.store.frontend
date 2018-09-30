@@ -11,7 +11,7 @@ export default class Thanks extends React.Component {
   render() {
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'Завершение покупки']} title="Благодарим за Ваш заказ." />
+        <Partials.PageTitle breadcumbs={[<Link to='/'>Главная</Link>, 'Завершение покупки']} title="Благодарим за Ваш заказ." />
 
         <div class="wrapper">
           <p class="text">

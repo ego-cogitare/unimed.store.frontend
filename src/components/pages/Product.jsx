@@ -259,7 +259,7 @@ export default class Product extends React.Component {
     return (
       <section>
         <Partials.PageTitle
-          breadcumbs={['Главная', 'Каталог', this.state.product.title]}
+          breadcumbs={[<Link to='/'>Главная</Link>, this.state.product.title]}
           title={this.state.product.title}
         />
         <div class="wrapper product-page">
@@ -285,7 +285,7 @@ export default class Product extends React.Component {
                 </div>
                 <div class="left">
                   <div class="product-photo">
-                    <img src={buildUrl(this.state.product.picture)} alt={this.state.product.title} />
+                    <img src={buildUrl(this.state.product.picture)} alt={this.state.product.title} title={this.state.product.title} />
                   </div>
                 </div>
               </div>
@@ -472,7 +472,7 @@ export default class Product extends React.Component {
                 {
                   this.state.product.awards.map((picture) => (
                     <div key={picture.id} class="award">
-                      <img src={buildUrl(picture)} alt="" />
+                      <img src={buildUrl(picture)} alt="" title="" />
                     </div>
                   ))
                 }

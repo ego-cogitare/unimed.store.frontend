@@ -56,7 +56,7 @@ export default class Blog extends React.Component {
   render() {
     return (
       <section>
-        <Partials.PageTitle breadcumbs={['Главная', 'Блог']} title="Блог" />
+        <Partials.PageTitle breadcumbs={[<Link to='/'>Главная</Link>, 'Блог']} title="Блог" />
 
         <div class="wrapper blog clear">
           <div class="content">
@@ -68,7 +68,7 @@ export default class Blog extends React.Component {
                       <div class="post-wrapper">
                         <div class="picture">
                           <Link to={`/post/${id}`}>
-                            <img src={buildUrl(picture)} alt={title} />
+                            <img src={buildUrl(picture)} alt={title} title={title} />
                           </Link>
                         </div>
                         <span class="tag fw-600">
@@ -115,7 +115,7 @@ export default class Blog extends React.Component {
               </li>
               <li class="widget">
                 <a href="#">
-                  <img src={require('../../staticFiles/img/sitebar/widget-banner.jpg')} alt="Banner" />
+                  <img src={require('../../staticFiles/img/sitebar/widget-banner.jpg')} alt="Banner" title="Banner" />
                 </a>
               </li>
             </ul>

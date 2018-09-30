@@ -16,7 +16,16 @@ export default class PageTitle extends React.Component {
             {
               this.props.breadcumbs.map((item, key) => (
                 <span key={key} class="breadcumb">
-                  <span class={classNames({ 'color-green': key === this.props.breadcumbs.length - 1 })}>{(item || '').substr(0, this.trimTo)}{(item || '').length > this.trimTo ? <span>&hellip;</span> : ''}</span>
+                  <span class={classNames({ 'color-green': key === this.props.breadcumbs.length - 1 })}>
+                    {
+                      typeof item === 'object'
+                        ? item
+                        : <span>
+                            {(item || '').substr(0, this.trimTo)}
+                            {(item || '').length > this.trimTo ? <span>&hellip;</span> : ''}
+                          </span>
+                    }
+                  </span>
                   { key < this.props.breadcumbs.length - 1 && <span> > </span> }
                 </span>
               ))

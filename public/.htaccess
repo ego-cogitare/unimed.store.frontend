@@ -2,3 +2,7 @@ RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [L]
+
+<IfModule mod_headers.c>
+  Header set Cache-Control "max-age=604800, must-revalidate"
+</IfModule>

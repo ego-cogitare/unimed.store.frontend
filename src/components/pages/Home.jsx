@@ -139,10 +139,10 @@ export default class Home extends React.Component {
             }
             </div>
             <div class="slider-arrow btn-prev hide">
-              <img src={require('../../staticFiles/img/home/slider/left-arrow.png')} alt="Previous" />
+              <img src={require('../../staticFiles/img/home/slider/left-arrow.png')} alt="Previous" title="Previous" />
             </div>
             <div class="slider-arrow btn-next">
-              <img src={require('../../staticFiles/img/home/slider/right-arrow.png')} alt="Next" />
+              <img src={require('../../staticFiles/img/home/slider/right-arrow.png')} alt="Next" title="Next" />
             </div>
           </div>
         </div>
@@ -197,7 +197,7 @@ export default class Home extends React.Component {
             this.state.posts.map(({ id, title, briefly, picture, pictureId }) => (
               <Link to={`/post/${id}`} key={id} class="post">
                 <div class="picture">
-                    <img src={buildUrl(picture)} alt={title} />
+                    <img src={buildUrl(picture)} alt={title} title={title} />
                 </div>
                 <div class="title">
                   {title}
