@@ -7,12 +7,7 @@
 
   /** Return static content for crawlers */
   if (!preg_match('/(PhantomJS|Prerender)/', $_SERVER['HTTP_USER_AGENT']) && $crawlerDetect->isCrawler()) {
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_URL => PRERENDER_URL . '/' . SHOP_URL . $_SERVER['REQUEST_URI'],
-    ));
-    echo curl_exec($curl);
+    echo file_get_contents(PRERENDER_URL . '/' . SHOP_URL . $_SERVER['REQUEST_URI']);
     exit;
   }
 

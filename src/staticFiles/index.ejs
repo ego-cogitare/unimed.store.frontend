@@ -3,7 +3,9 @@
 <!--[if IE 7 ]>    <html lang="en" class="ie7" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
 <!--[if IE 8 ]>    <html lang="en" class="ie8" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en" class="ie9" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>> <!--<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="" <% if(htmlWebpackPlugin.files.manifest) { %> manifest="<%= htmlWebpackPlugin.files.manifest %>"<% } %>>
+<!--<![endif]-->
 <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126727699-1"></script>
@@ -16,26 +18,24 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-  <title><%= htmlWebpackPlugin.options.title || 'Webpack App'%></title>
-
+  <meta name="keywords" itemprop="keywords" content="organic food">
+  <meta name="description" itemprop="description" content="Обычные моющие средства насыщают жильё отравляющими веществами. Мы убираем в доме не только для красоты, но и для здоровья. Чтобы не дышать пылью и плесенью">
+  <meta property="og:image" content="http://shop.junimed.ua/images/header-logo.png">
+  <title><%= htmlWebpackPlugin.options.title || ''%></title>
   <% if (htmlWebpackPlugin.files.favicon) { %>
     <link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon%>">
   <% } %>
-
   <% if (htmlWebpackPlugin.options.mobile) { %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <% } %>
-
   <% for (var css in htmlWebpackPlugin.files.css) { %>
     <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
   <% } %>
-
   <% if (htmlWebpackPlugin.options.externalSources) { %>
     <% for (var chunk in htmlWebpackPlugin.options.externalSources.css) { %>
       <link href="<%= htmlWebpackPlugin.options.externalSources.css[chunk] %>" rel="stylesheet">
     <% } %>
   <% } %>
-
   <% if (htmlWebpackPlugin.options.externalSources) { %>
     <% for (var chunk in htmlWebpackPlugin.options.externalSources.js) { %>
       <script src="<%= htmlWebpackPlugin.options.externalSources.js[chunk] %>"></script>
