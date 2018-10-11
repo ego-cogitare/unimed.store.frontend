@@ -185,7 +185,7 @@ export default class Checkout extends React.Component {
                   */}
                   <div class="order-wrapper clear">
                     <div class="customer-info">
-                      <div class="heading-1">покупатель</div>
+                      <h1 class="heading-1">покупатель</h1>
                       <form class="customer-form" action="" method="post">
                         <label class="clear"><span>ФИО:</span>
                         <span class="no-padding">
@@ -218,7 +218,7 @@ export default class Checkout extends React.Component {
                 </div>
                 <div class="delivery-payment-info">
                   <div class={classNames('delivery', {'color-red': this.state.errors['deliveryId']})}>
-                    <div class="heading-1">способ доставки</div>
+                    <h1 class="heading-1">способ доставки</h1>
                     {
                       this.state.delivery.map(({id, title}) => (
                         <span key={id}>
@@ -231,7 +231,7 @@ export default class Checkout extends React.Component {
                     }
                   </div>
                   <div class={classNames('payment', {'color-red': this.state.errors['paymentId']})}>
-                    <div class="heading-1">способ оплаты</div>
+                    <h1 class="heading-1">способ оплаты</h1>
                     {
                       this.state.payment.map(({id, title}) => (
                         <span key={id}>

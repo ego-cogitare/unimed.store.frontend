@@ -1,7 +1,8 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
 import Settings from '../../core/helpers/Settings';
 import Partials from './partials';
-import { dispatch } from '../../core/helpers/EventEmitter';
+import { dispatch, subscribe } from '../../core/helpers/EventEmitter';
 import { bootstrap } from '../../actions/bootstrap';
 import '../../staticFiles/css/main.css';
 
@@ -19,6 +20,12 @@ export default class Layout extends React.Component {
   // Get bootstrap settings
   componentDidMount() {
     this.getBootstrapData();
+
+    subscribe('request:result', (r) => {
+      if (r.status >= 500) {
+        browserHistory.push('/error');
+      }
+    });
   }
 
   componentWillReceiveProps(props) {

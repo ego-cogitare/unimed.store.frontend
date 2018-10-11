@@ -51,6 +51,10 @@ const routes = {
       path: '/payment/liqpay/:id',
       component: require('../components/pages/LiqPay.jsx').default
     },
+    {
+      path: '/error',
+      component: require('../components/pages/errors/500.jsx').default
+    },
   ],
 
   resolve: function (route) {

@@ -61,18 +61,18 @@ export default class LeftMenu extends React.Component {
               </li>
             </ul>
           </div>
-          <div class="contacts right">
+          <div itemScope itemType="http://schema.org/Organization" class="contacts right">
             <p class="heading-3">
-              <span class="heading-4 fw-500">тел:</span> <a class="fw-100" href="tel:+380445269898">+38 (044)526-98-98</a>
+              <span class="heading-4 fw-500">тел:</span> <a class="fw-100" href="tel:+380445269898"><span itemProp="email">+38 (044)526-98-98</span></a>
             </p>
             <p class="heading-3">
-              <a class="fw-100" href="tel:+380445269899">+38 (044)526-98-99</a>
+              <a class="fw-100" href="tel:+380445269899"><span itemProp="telephone">+38 (044)526-98-99</span></a>
             </p>
             <p class="heading-3">
-              <a class="fw-100" href="tel:+380445269900">+38 (044)526-99-00</a>
+              <a class="fw-100" href="tel:+380445269900"><span itemProp="telephone">+38 (044)526-99-00</span></a>
             </p>
             <p class="heading-3 email">
-              <span class="heading-4 fw-500">e-mail:</span> <a class="fw-100" href="mailto:n.suzdaltseva@junimed.ua">n.suzdaltseva@junimed.ua</a>
+              <span class="heading-4 fw-500">e-mail:</span> <a class="fw-100" href="mailto:n.suzdaltseva@junimed.ua"><span itemProp="email">n.suzdaltseva@junimed.ua</span></a>
             </p>
             <Socials />
           </div>

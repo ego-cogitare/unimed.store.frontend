@@ -82,9 +82,9 @@ export default class Blog extends React.Component {
                           }
                         </span>
                         <span class="date"> {Moment(dateCreated * 1000).format('DD.MM.YYYY')}</span>
-                        <div class="heading-1">
+                        <h1 class="heading-1">
                           {title}
-                        </div>
+                        </h1>
                       </div>
                     </div>
                   )) :
@@ -94,9 +94,9 @@ export default class Blog extends React.Component {
           </div>
 
           <div class="sitebar">
-            <div class="heading-1">
+            <h1 class="heading-1">
               поиск по тегам:
-            </div>
+            </h1>
             <ul class="tags-list fw-600">
             {
               (this.state.tags || []).map(({ id, title }, key) => (

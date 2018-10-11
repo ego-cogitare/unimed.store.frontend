@@ -40,7 +40,7 @@ export default class Contacts extends React.Component {
       <section>
         <Partials.PageTitle breadcumbs={[<Link to='/'>Главная</Link>, 'Контакты']} title="Контакты" />
 
-        <div class="wrapper blog contacts clear">
+        <div itemScope itemType="http://schema.org/Organization" class="wrapper blog contacts clear">
           <div class="content clear">
             <div class="map-wrapper">
               <div class="map" id="map">
@@ -48,48 +48,48 @@ export default class Contacts extends React.Component {
                 <div class="map-label">главный офис</div>
               </div>
             </div>
-            <div class="address">
-              <div class="heading-1">
-                Главный офис,<br/> шоу рум
-              </div>
+            <div itemProp="address" itemScope itemType="http://schema.org/PostalAddress" class="address">
+              <h1 class="heading-1">
+                <span itemProp="name">Главный офис,<br/> шоу рум</span>
+              </h1>
               <p class="text ico-location">
-                <strong>ул. Канатная 53</strong>
+                <strong itemProp="streetAddress">ул. Канатная 53</strong>
               </p>
               <p class="text">
                 Директор - Стрелец Иннокентий
               </p>
               <p class="text ico-phone">
-                тел/факс <a href="tel:+38 (048) 705 43 48">+38 (048) 705 43 48</a>
+                тел/факс <a href="tel:+38 (048) 705 43 48"><span itemProp="telephone">+38 (048) 705 43 48</span></a>
               </p>
               <p class="text">
-                моб. <a href="tel:+38 (063) 523 65 65">+38 (063) 523 65 65</a>
+                моб. <a href="tel:+38 (063) 523 65 65"><span itemProp="telephone">+38 (063) 523 65 65</span></a>
               </p>
               <p class="text ico-mail">
-                <a href="mailto:junimed-odessa@ukr.net">junimed-odessa@ukr.net</a>
+                <a href="mailto:junimed-odessa@ukr.net"><span itemProp="email">junimed-odessa@ukr.net</span></a>
               </p>
               <p class="text ico-skype">
                 Skype: <a href="skype:junimed2">junimed2</a>
               </p>
             </div>
-            <div class="address">
-              <div class="heading-1">
-                <br/>склад
-              </div>
+            <div itemProp="address" itemScope itemType="http://schema.org/PostalAddress" class="address">
+              <h1 class="heading-1">
+                <br/><span itemProp="name">склад</span>
+              </h1>
               <p class="text ico-location">
-                <strong>ул. Картамышевская, 9-б</strong>
+                <strong itemProp="streetAddress">ул. Картамышевская, 9-б</strong>
               </p>
               <p class="text">
                 Алексей Бабенко
               </p>
               <p class="text ico-phone">
-                моб. <a href="tel:+38 (063) 523 65 65">+38 (063) 523 65 65</a>
+                моб. <a href="tel:+38 (063) 523 65 65"><span itemProp="telephone">+38 (063) 523 65 65</span></a>
               </p>
             </div>
           </div>
           <div class="sitebar">
-            <div class="heading-1">
+            <h1 class="heading-1">
               <br/>мы в соцсетях
-            </div>
+            </h1>
             <ul class="widgets">
               <li class="widget">
                 <i class="fa fa-facebook"></i>

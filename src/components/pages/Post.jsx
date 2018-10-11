@@ -122,9 +122,9 @@ export default class Post extends React.Component {
                   <div class="cover-wrapper left">
                     <img src={buildUrl(this.state.post.picture)} alt={this.state.post.title} title={this.state.post.title} />
                   </div>
-                  <div class="heading-1">
+                  <h1 class="heading-1">
                     {this.state.post.title}
-                  </div>
+                  </h1>
                   <div class="tag-date">
                     <span class="tag fw-600">
                     {
@@ -145,7 +145,7 @@ export default class Post extends React.Component {
                   this.state.post.video &&
                   <div class="section-header text-left no-margin">
                     <div class="title-wrapper">
-                      <div class="heading-1">обзор на youtube:</div>
+                      <h1 class="heading-1">обзор на youtube:</h1>
                     </div>
                     <div class="description"></div>
                   </div>
@@ -179,7 +179,7 @@ export default class Post extends React.Component {
                           }
                           </span>
                           <span class="date">{Moment(this.state.post.dateCreated * 1000).format('DD.MM.YYYY')}</span>
-                          <div class="heading-1">{title}</div>
+                          <h1 class="heading-1">{title}</h1>
                         </div>
                       </div>
                     ))
@@ -253,9 +253,9 @@ export default class Post extends React.Component {
                     className="no-hover-border no-hover-btn"
                   />
                 }
-                <div class="heading-1">
+                <h1 class="heading-1">
                   поиск по тегам:
-                </div>
+                </h1>
                 <ul class="tags-list fw-600">
                 {
                   (this.state.tags || []).map(({ id, title }, key) => (

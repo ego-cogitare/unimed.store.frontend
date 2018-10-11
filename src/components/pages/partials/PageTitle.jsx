@@ -31,9 +31,9 @@ export default class PageTitle extends React.Component {
               ))
             }
           </div>
-          <div class="heading-1 fw-500">
+          <h1 class="heading-1 fw-500">
             {(this.props.title || '').substr(0, this.trimTo)}{(this.props.title || '').length > this.trimTo ? <span>&hellip;</span> : ''}
-          </div>
+          </h1>
         </div>
       </div>
     );
