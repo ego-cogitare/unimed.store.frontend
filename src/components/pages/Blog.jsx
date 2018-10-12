@@ -63,11 +63,11 @@ export default class Blog extends React.Component {
             <div class="posts">
               {
                 this.state.posts.length > 0 ?
-                  this.state.posts.map(({ id, title, tags, picture, dateCreated }) => (
+                  this.state.posts.map(({ id, slug, title, tags, picture, dateCreated }) => (
                     <div key={id} class="post">
                       <div class="post-wrapper">
                         <div class="picture">
-                          <Link to={`/post/${id}`}>
+                          <Link to={`/post/${slug}`}>
                             <img src={buildUrl(picture)} alt={title} title={title} />
                           </Link>
                         </div>

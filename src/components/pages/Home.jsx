@@ -130,8 +130,8 @@ export default class Home extends React.Component {
           <div ref="brands-slider" id="brands-slider" class="swiper-container">
             <div class="swiper-wrapper">
             {
-              this.state.brands.map(({ id, picture, title }) => (
-                <Link to={`/brand/${id}`} key={id} class="swiper-slide" style={{ backgroundImage: "url('" + buildUrl(picture) + "')" }}>
+              this.state.brands.map(({ id, slug, picture, title }) => (
+                <Link to={`/brand/${slug}`} key={id} class="swiper-slide" style={{ backgroundImage: "url('" + buildUrl(picture) + "')" }}>
                   <div class="figure"></div>
                   <div class="title">{title}</div>
                 </Link>
@@ -194,8 +194,8 @@ export default class Home extends React.Component {
         <div class="wrapper">
           <div class="blog-preview">
           {
-            this.state.posts.map(({ id, title, briefly, picture, pictureId }) => (
-              <Link to={`/post/${id}`} key={id} class="post">
+            this.state.posts.map(({ id, slug, title, briefly, picture, pictureId }) => (
+              <Link to={`/post/${slug}`} key={id} class="post">
                 <div class="picture">
                     <img src={buildUrl(picture)} alt={title} title={title} />
                 </div>

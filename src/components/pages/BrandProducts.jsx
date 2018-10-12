@@ -18,17 +18,17 @@ export default class BrandProducts extends React.Component {
   componentDidMount() {
     brand(
       { id: this.props.params.id },
-      (brand) => this.setState({ brand }),
-      (error)  => console.error(error)
-    );
-
-    products(
-      {
-        filter: JSON.stringify({ brandId: this.props.params.id }),
-        orderBy: 'dateCreated',
-        ascdesc: -1
-      },
-      (products) => this.setState({ products }),
+      (brand) => this.setState({ brand },() => {
+        products(
+          {
+            filter: JSON.stringify({ brandId: this.state.brand.id }),
+            orderBy: 'dateCreated',
+            ascdesc: -1
+          },
+          (products) => this.setState({ products }),
+          (error)  => console.error(error)
+        );
+      }),
       (error)  => console.error(error)
     );
   }
@@ -50,14 +50,14 @@ export default class BrandProducts extends React.Component {
           }
           <div class="categories-list clear">
           {
-            this.state.products.map(({id, title, picture}) => (
+            this.state.products.map(({id, slug, title, picture}) => (
               <div key={id} class="category">
                 <div class="category-wrapper">
                   <div class="heading-2">
                     <span>{title}</span>
                   </div>
                   <div class="picture">
-                    <Link to={`/product/${id}`}>
+                    <Link to={`/product/${slug}`}>
                       <img src={buildUrl(picture)} alt={title} title={title} />
                     </Link>
                   </div>

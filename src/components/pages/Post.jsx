@@ -85,7 +85,7 @@ export default class Post extends React.Component {
     e.preventDefault();
 
     addPostComment(
-      Object.assign({ ...this.state.comment }, { postId: this.props.params.id }),
+      Object.assign({ ...this.state.comment }, { postId: this.state.post.id }),
       (response) => this.setState({
           comment: { ...this.emptyComment, successMessage: response.message },
           post: Object.assign(this.state.post, {
@@ -160,11 +160,11 @@ export default class Post extends React.Component {
                 <Partials.BlockTitle title="вам может быть интересно:" className="text-left no-margin" />
                 <div class="posts">
                   {
-                    this.state.relatedPosts.map(({id, title, picture, dateCreated, tags}) => (
+                    this.state.relatedPosts.map(({id, slug, title, picture, dateCreated, tags}) => (
                       <div key={id} class="post">
                         <div class="post-wrapper">
                           <div class="picture">
-                            <Link to={`/post/${id}`}>
+                            <Link to={`/post/${slug}`}>
                               <img src={buildUrl(picture)} alt={title} title={title} />
                             </Link>
                           </div>

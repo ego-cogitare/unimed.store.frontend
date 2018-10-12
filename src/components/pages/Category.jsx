@@ -44,7 +44,6 @@ export default class Category extends React.Component {
 
     this.filter['$and'][0].price['$gte'] = 0;
     this.filter['$and'][1].price['$lte'] = Number(prices.maxPrice);
-    this.resolveState(this.props);
 
     this.setState({ jRange: [0, prices.maxPrice] }, () => {
       $(this.refs['price-range']).jRange({
@@ -98,13 +97,13 @@ export default class Category extends React.Component {
   }
 
   getCategory() {
-    return this.state.categories.find(({ id }) => id === this.props.params.id) || {};
+    return this.state.categories.find(({ slug }) => slug === this.props.params.id) || {};
   }
 
   componentDidMount() {
     categories(
       { orderBy: 'order', ascdesc: 1 },
-      (categories) => this.setState({ categories }),
+      (categories) => this.setState({ categories }, () => this.resolveState(this.props)),
       (error)  => console.error(error)
     );
     // this.resolveState(this.props);
@@ -115,6 +114,7 @@ export default class Category extends React.Component {
   }
 
   resolveState(props) {
+    let category = this.state.categories.find(({ slug }) => slug === props.params.id);
     let { page: curPage, limit: current, orderBy, ascdesc, keyword, customFilter } = queryString.parse(location.search);
 
     if (typeof curPage === 'undefined') {
@@ -137,8 +137,8 @@ export default class Category extends React.Component {
     this.filter['$and'] = this.filter['$and'].slice(0, 2);
 
     // If category id set
-    if (props.params.id) {
-      this.filter['$and'].push({ categoryId: props.params.id });
+    if (category) {
+      this.filter['$and'].push({ categoryId: category.id });
     }
 
     // If search keyword set
@@ -204,9 +204,9 @@ export default class Category extends React.Component {
                 >все</Link>
               </li>
               {
-                this.state.categories.map(({ id, title }) => (
+                this.state.categories.map(({ id, slug, title }) => (
                   <li key={id} class="item">
-                    <Link to={{ pathname: `/category/${id}`, query: {
+                    <Link to={{ pathname: `/category/${slug}`, query: {
                           page: 1,
                           limit: this.state.perPage.current,
                           orderBy: this.state.sort.field,

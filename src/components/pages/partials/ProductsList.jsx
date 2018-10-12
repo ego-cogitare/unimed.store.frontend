@@ -15,12 +15,12 @@ export default class ProductsList extends React.Component {
       <div class="products-list">
       {
         this.props.products.length > 0 ?
-          this.props.products.map(({ id, title, price, isNovelty, isAuction, picture, brand }, key) => {
+          this.props.products.map(({ id, slug, title, price, isNovelty, isAuction, picture, brand }, key) => {
             if (this.props.curPage && this.props.perPage && (key < (this.props.curPage - 1) * this.props.perPage || key >= this.props.curPage * this.props.perPage)) {
               return null;
             }
             return (
-              <Link to={`/product/${id}`} key={id} className={classNames('product', this.props.className || {'new': isNovelty, 'sale': isAuction} )}>
+              <Link to={`/product/${slug}`} key={id} className={classNames('product', this.props.className || {'new': isNovelty, 'sale': isAuction} )}>
                 <div class="product-wrapper">
                   <div class="picture">
                     { picture ? <img src={buildUrl(picture)} alt={title} title={title} /> : <img src={require('../../../staticFiles/img/no-picture.jpg')} alt="No picture available" title="No picture available" /> }
