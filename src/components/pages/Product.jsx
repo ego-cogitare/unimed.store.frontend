@@ -70,7 +70,7 @@ export default class Product extends React.Component {
       (product) => this.setState({
         product,
         // product: Object.assign(product, { discountTimeout: '' }),
-        historyList: viewHistoryList().filter(({id}) => id !== this.props.params.id)
+        historyList: viewHistoryList().filter(({ slug }) => slug !== this.props.params.id)
       },
       () => {
         // Initialize product slider

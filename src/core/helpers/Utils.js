@@ -25,6 +25,7 @@ export function viewHistoryPush(product) {
 
   history.unshift({
     id: product.id,
+    slug: product.slug,
     picture: product.picture,
     brand: product.brand,
     title: product.title,
